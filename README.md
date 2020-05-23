@@ -24,9 +24,9 @@ $ yarn dev
 
 Then go to [http://localhost:3000/battle/forest](http:/localhost:3000/battle/forest) in chrome (because honestly that's the only one I've tested in right now) and enjoy.
 
-### Router
+### Paths
 
-I use [react-router](https://github.com/ReactTraining/react-router) for this project. The urls change the battle scene
+I use [next.js](https://nextjs.org/) for this project. The urls change the battle scene
 and the enemies that appear. There will always be between 1-5 enemies but they are filtered based on where I think they
 would exist if for some reason this world was real 😉. Here's a list of all of the locations you can go to. Still working
 on the beach one because I'm not super happy with it.
