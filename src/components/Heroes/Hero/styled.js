@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+const multiplier = (amount) => `-${amount * 115}px`
+const setBackgroundPos = (x, y) => `${multiplier(x)} ${multiplier(y)}`
+
 export const HeroStyled = styled.div`
   flex: 0.5;
   position: relative;
@@ -7,9 +10,9 @@ export const HeroStyled = styled.div`
   transition: top 1s ease, left 1s ease;
   position: absolute;
   background-image: url('/img/battle-sprites2.png');
-  background-size: 700px;
-  height: 100px;
-  width: 100px;
+  background-size: 820px;
+  height: 120px;
+  width: 120px;
   top: ${({ position }) => {
     const obj = {
       1: '30%',
@@ -21,12 +24,12 @@ export const HeroStyled = styled.div`
   left: ${({ position }) => (position < 3 ? '25%' : '50%')};
   background-position: ${({ name }) => {
     const obj = {
-      'red-boy': '6px 3px',
-      'white-girl': '7px -95px',
-      'green-boy': '3px -190px',
+      'red-boy': setBackgroundPos(0, 0),
+      'white-girl': setBackgroundPos(0, 1),
+      'green-boy': setBackgroundPos(0, 2),
     }
     return obj[name]
   }};
   left: ${(props) => props.isHeroAttacking && 0};
-  background-position-x: ${(props) => props.isHeroAttacking && '-95px'};
+  background-position-x: ${(props) => props.isHeroAttacking && multiplier(1)};
 `

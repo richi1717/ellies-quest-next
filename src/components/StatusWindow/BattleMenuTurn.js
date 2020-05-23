@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
+import { GET_WHOSE_TURN } from '../../operations/queries/getWhoseTurn'
 // import {
 //   setAttackerAndTarget,
 //   setBattleMenuAction,
@@ -8,8 +10,10 @@ import PropTypes from 'prop-types'
 
 const BattleMenuTurn = (props) => {
   const [action, setAction] = useState('')
+  const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
+  const whoseTurn = whoseTurnQuery?.data?.whoseTurn
   // console.log(props)
-  const setMenuAction = (selection) => (attacker, target) => {
+  const setMenuAction = (selection) => (whoseTurn, target) => {
     // dispatch(
     //   setBattleMenuAction({
     //     selection
@@ -17,7 +21,7 @@ const BattleMenuTurn = (props) => {
     // );
     // dispatch(
     //   setAttackerAndTarget({
-    //     attacker,
+    //     whoseTurn,
     //     target,
     //     typeOfAttack: selection
     //   })
@@ -29,13 +33,13 @@ const BattleMenuTurn = (props) => {
   const itemsClick = setMenuAction('items')
   const runClick = setMenuAction('run')
 
-  const { whoIsAttacking, characterStats } = props.state
-  const { attacker, target } = whoIsAttacking
+  const { characterStats } = props.state
+  const { target } = whoseTurn
   const renderListButton = (clickHandler, menuText, extraClass = '') => (
     <li>
       <button
         type="button"
-        onClick={() => clickHandler(attacker, target)}
+        onClick={() => clickHandler(whoseTurn, target)}
         className={`menu-select${extraClass}`}
       >
         {menuText}
@@ -43,8 +47,8 @@ const BattleMenuTurn = (props) => {
     </li>
   )
 
-  if (attacker.includes('hero')) {
-    const heroStats = characterStats[attacker.split('hero')[1] - 1]
+  if (whoseTurn.includes('hero')) {
+    const heroStats = characterStats[whoseTurn.split('hero')[1] - 1]
     const canUseMagic = heroStats.magicAbilities
     return (
       <div className="battle-menu-turn">
