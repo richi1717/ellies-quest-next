@@ -1,0 +1,31 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "prettierx", "jsx-a11y"],
+  "extends": [
+    "plugin:react/recommended",
+    "standardize",
+    "plugin:prettierx/standardize-bundle",
+    "plugin:prettierx/react",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "rules": {
+    "no-nested-ternary": "error",
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ],
+    "jsx-quotes": ["error", "prefer-double"],
+    "prettierx/options": [
+      "error",
+      {
+        "arrowParens": "always"
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": "off"
+  }
+}
