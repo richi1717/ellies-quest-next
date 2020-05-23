@@ -1,7 +1,9 @@
 export default function addCharacter (characterVar) {
   return (enemies, heroes) => {
     enemies.forEach((enemy, idx) => {
-      enemy.battleName = `enemy${idx + 1}`
+      if (!enemy?.battleName) {
+        enemy.battleName = `enemy${idx + 1}`
+      }
     })
     const characters = [...enemies, ...heroes]
 

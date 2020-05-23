@@ -22,6 +22,7 @@ export const MenuMainContainer = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   z-index: 1;
+  margin-right: 3px;
 `
 
 export const MenuStatsContainer = styled.div`
@@ -37,6 +38,7 @@ export const MenuStatsContainer = styled.div`
   box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
   background-color: ${blackTransparent};
   border-radius: 5px;
+  margin-left: 3px;
 `
 
 export const MenuStats = styled.div`
