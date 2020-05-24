@@ -1,10 +1,5 @@
 import clone from 'lodash/fp/clone'
 import { damageCalculation, magicDamageCalculation } from '../helpers/damageCalc'
-import {
-  endHeroTurn,
-  setAttackerAndTarget,
-  updateCharacterStats,
-} from '../actions/actionCreators'
 
 export default function useAttack (deets) {
   const dispatch = 'what?'
@@ -12,17 +7,17 @@ export default function useAttack (deets) {
 
   const completePhase = (enemy, id) => {
     setTimeout(() => {
-      dispatch(endHeroTurn({ enemy, id }))
+      // dispatch(endHeroTurn({ enemy, id }))
     }, 1500)
   }
 
   const magicCompletePhase = (enemy, id, character, characterId) => {
-    dispatch(
-      updateCharacterStats({
-        character,
-        id: characterId,
-      })
-    )
+    // dispatch(
+    //   updateCharacterStats({
+    //     character,
+    //     id: characterId,
+    //   })
+    // )
     completePhase(enemy, id)
   }
 
@@ -56,13 +51,13 @@ export default function useAttack (deets) {
     const killed = dmg >= enemyCopy.currentHp
     enemyCopy.currentHp -= dmg
 
-    dispatch(
-      setAttackerAndTarget({
-        attacker,
-        target,
-        typeOfAttack: whoIsAttacking.typeOfAttack,
-      })
-    )
+    // dispatch(
+    //   setAttackerAndTarget({
+    //     attacker,
+    //     target,
+    //     typeOfAttack: whoIsAttacking.typeOfAttack,
+    //   })
+    // )
 
     if (killed) {
       enemyCopy.currentHp = 0

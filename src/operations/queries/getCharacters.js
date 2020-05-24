@@ -3,7 +3,14 @@ import { charactersVar } from '../../cache'
 
 export const GET_CHARACTERS = gql`
   query GetCharacters {
-    characters @client
+    heroes @client {
+      battleName
+      name
+    }
+    enemies @client {
+      battleName
+      name
+    }
   }
 `
 
