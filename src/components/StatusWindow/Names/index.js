@@ -9,7 +9,7 @@ const Names = ({ hero }) => {
   const selected = whoseTurnQuery?.data?.whoseTurn?.name === hero.name
 
   const handleClick = () => {
-    orderMutations.setWhoseTurn()
+    orderMutations.skipTurn()
   }
 
   return (

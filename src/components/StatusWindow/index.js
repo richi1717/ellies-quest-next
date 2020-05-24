@@ -1,6 +1,6 @@
 // import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client'
-import StatusBars from './StatusBars'
+import HeroStats from './HeroStats'
 import StatusWindowNames from './Names'
 import {
   MenuContainer,
@@ -14,9 +14,9 @@ import { GET_HEROES } from '../../operations/queries/getCharacters'
 import { GET_WHOSE_TURN } from '../../operations/queries/getWhoseTurn'
 
 export default function StatusWindow () {
-  const { data } = useQuery(GET_HEROES)
+  const heroesQuery = useQuery(GET_HEROES)
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
-  const heroes = data?.heroes
+  const heroes = heroesQuery?.data?.heroes
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
 
   const renderNames = () =>
@@ -25,7 +25,7 @@ export default function StatusWindow () {
     ))
 
   const showStatusPerCharacter = () =>
-    heroes.map((stat) => <StatusBars key={stat.name} stat={stat} />)
+    heroes.map((stat) => <HeroStats key={stat.name} stat={stat} />)
 
   return (
     <MenuContainer>

@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 
-export default function setWhoseTurn (orderVar, whoseTurnVar) {
+export function skipTurn (orderVar, whoseTurnVar) {
   return () => {
     const turn = whoseTurnVar()
     const order = orderVar()
@@ -13,5 +13,18 @@ export default function setWhoseTurn (orderVar, whoseTurnVar) {
 
     orderVar(newOrder)
     whoseTurnVar(whoseTurn)
+  }
+}
+
+export function finishTurn (orderVar, whoShouldRestartTimerVar, whoseTurnVar) {
+  return () => {
+    const endersTurn = whoseTurnVar()
+    const order = orderVar()
+    const whoseTurn = order.shift()
+    const newOrder = [...order]
+
+    orderVar(newOrder)
+    whoseTurnVar(whoseTurn)
+    whoShouldRestartTimerVar(endersTurn?.battleName)
   }
 }

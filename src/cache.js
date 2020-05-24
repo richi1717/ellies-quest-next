@@ -29,6 +29,11 @@ export const cache = new InMemoryCache({
             return heroesVar()
           },
         },
+        whoShouldRestartTimer: {
+          read () {
+            return whoShouldRestartTimerVar()
+          },
+        },
       },
     },
   },
@@ -39,3 +44,4 @@ export const enemiesVar = cache.makeVar([])
 export const heroesVar = cache.makeVar([])
 export const orderVar = cache.makeVar([])
 export const whoseTurnVar = cache.makeVar({})
+export const whoShouldRestartTimerVar = cache.makeVar('')

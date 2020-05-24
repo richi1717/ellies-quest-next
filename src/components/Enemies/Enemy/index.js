@@ -5,6 +5,7 @@ import { EnemyDisplay } from './styled'
 import { orderMutations } from '../../../operations/mutations'
 import CountDownTimer from '../../../helpers/CountDownTimer'
 import { getCharacterByBattleName } from '../../../operations/queries/getCharacters'
+import { useTimer } from '../../../hooks'
 
 // import { enemyAttackFX } from '../../helpers/soundEffects'
 // import setTimeoutHelper from '../helpers/time-out';
@@ -16,35 +17,20 @@ const Enemy = (props) => {
   const [isAttackingHero0, setIsAttackingHero0] = useState(false)
   const [isAttackingHero1, setIsAttackingHero1] = useState(false)
   const [isAttackingHero2, setIsAttackingHero2] = useState(false)
-  // const enemy = getCharacterByBattleName(battleName)
-  // console.log(enemy)
 
-  useEffect(() => {
-    function listener () {
-      const timer = new CountDownTimer(100, 50)
+  const timer = new CountDownTimer(100, 50)
 
-      timer
-        .onTick(handleTick())
-        .setAgility(enemy.agility)
-        .start()
+  function handleTick () {
+    return function (seconds) {
+      const percentage = 100 - seconds
 
-      function handleTick () {
-        return function (seconds) {
-          const percentage = 100 - seconds
-
-          if (percentage === 100) {
-            orderMutations.append(enemy)
-          }
-        }
+      if (percentage === 100) {
+        orderMutations.append(enemy)
       }
     }
+  }
 
-    window.addEventListener('load', listener)
-
-    return () => {
-      window.removeEventListener('load', listener)
-    }
-  }, [])
+  useTimer(timer, enemy, handleTick)
 
   // this.completePhase = (enemy, id) => {
   //   dispatch({

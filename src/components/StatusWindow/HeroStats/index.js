@@ -1,44 +1,13 @@
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import StatusTimer from '../Timer'
 import {
-  greenTransparent,
-  lightBlueTransparent,
-  redTransparent,
-  yellowTransparent,
-} from '../../constants/variables'
-import StatusTimer from './Timer'
+  CurrentStatsContainer,
+  StatusBar,
+  StatusBarContainer,
+  StatusContainer,
+} from './styled'
 
-const StatusContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-
-const CurrentStatsContainer = styled.div`
-  flex: 2;
-  align-self: flex-end;
-  color: ${(props) => (props['data-low'] ? redTransparent : 'inherit')};
-
-  &:not(:last-child) {
-    padding: 0 70px 0 0;
-  }
-`
-
-const StatusBarContainer = styled.div`
-  height: 5px;
-  background-color: ${redTransparent};
-`
-
-const StatusBar = styled.div`
-  background-color: ${(props) => {
-    const obj = { hp: greenTransparent, mp: lightBlueTransparent, time: yellowTransparent }
-    return obj[props.type]
-  }};
-  border-radius: 10px;
-  height: 5px;
-  width: ${(props) => props.width}%;
-`
-
-export default function StatusBars ({ stat }) {
+export default function HeroStats ({ stat }) {
   const hpPercentage = Math.ceil((stat.currentHp / stat.maxHp) * 100)
   const mpPercentage = Math.ceil((stat.currentMp / stat.maxMp) * 100)
 
@@ -57,13 +26,13 @@ export default function StatusBars ({ stat }) {
         </StatusBarContainer>
       </CurrentStatsContainer>
       <CurrentStatsContainer>
-        <StatusTimer agility={stat.agility} name={stat.battleName} character={stat} />
+        <StatusTimer name={stat.battleName} character={stat} />
       </CurrentStatsContainer>
     </StatusContainer>
   )
 }
 
-StatusBars.propTypes = {
+HeroStats.propTypes = {
   stat: PropTypes.shape({
     agility: PropTypes.number.isRequired,
     battleName: PropTypes.string.isRequired,
