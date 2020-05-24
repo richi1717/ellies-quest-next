@@ -2,6 +2,7 @@
 import { useQuery } from '@apollo/client'
 import HeroStats from './HeroStats'
 import StatusWindowNames from './Names'
+import BattleMenu from './BattleMenu'
 import {
   MenuContainer,
   MenuMainContainer,
@@ -21,11 +22,23 @@ export default function StatusWindow () {
 
   const renderNames = () =>
     heroes.map((hero) => (
-      <StatusWindowNames key={hero.name} whoIsAttacking={whoseTurn} hero={hero} />
+      <StatusWindowNames
+        key={hero.name}
+        selected={whoseTurn?.battleName === hero?.battleName}
+        name={hero?.name}
+      />
     ))
 
   const showStatusPerCharacter = () =>
-    heroes.map((stat) => <HeroStats key={stat.name} stat={stat} />)
+    heroes.map((stats) => <HeroStats key={stats.name} stats={stats} />)
+
+  const showBattleMenu = () =>
+    heroes.map(
+      (stats) =>
+        stats.battleName === whoseTurn?.battleName && (
+          <BattleMenu key={stats.battleName} stats={stats} />
+        )
+    )
 
   return (
     <MenuContainer>
@@ -43,6 +56,7 @@ export default function StatusWindow () {
         </MenuStatsHeaderContainer>
         {showStatusPerCharacter()}
       </MenuStatsContainer>
+      {showBattleMenu()}
     </MenuContainer>
   )
 }

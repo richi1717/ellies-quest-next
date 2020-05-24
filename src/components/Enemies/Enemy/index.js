@@ -99,8 +99,8 @@ const Enemy = (props) => {
   //     this.enemyKilledFadeOut(ENEMY, 'block');
   //     setTimeOutHelper(2000, this.props.deleteEnemyWhenKilled, this.props.position);
   //   } else {
-  //     const NEW_STATS = this.props.enemyStats.find(function (stat) {
-  //       return stat.get('id') === this.props.position;
+  //     const NEW_STATS = this.props.enemyStats.find(function (stats) {
+  //       return stats.get('id') === this.props.position;
   //     }.bind(this)).set('currentHp', NEW_HP);
   //     this.props.updateEnemyStats(NEW_STATS.toJSON(), this.props.position);
   //   }

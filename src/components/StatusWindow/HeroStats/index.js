@@ -7,33 +7,33 @@ import {
   StatusContainer,
 } from './styled'
 
-export default function HeroStats ({ stat }) {
-  const hpPercentage = Math.ceil((stat.currentHp / stat.maxHp) * 100)
-  const mpPercentage = Math.ceil((stat.currentMp / stat.maxMp) * 100)
+export default function HeroStats ({ stats }) {
+  const hpPercentage = Math.ceil((stats.currentHp / stats.maxHp) * 100)
+  const mpPercentage = Math.ceil((stats.currentMp / stats.maxMp) * 100)
 
   return (
     <StatusContainer>
       <CurrentStatsContainer data-low={hpPercentage <= 95}>
-        {stat.currentHp}/{stat.maxHp}
+        {stats.currentHp}/{stats.maxHp}
         <StatusBarContainer>
           <StatusBar type="hp" width={hpPercentage} />
         </StatusBarContainer>
       </CurrentStatsContainer>
       <CurrentStatsContainer data-low={mpPercentage <= 25}>
-        {stat.currentMp}/{stat.maxMp}
+        {stats.currentMp}/{stats.maxMp}
         <StatusBarContainer>
           <StatusBar type="mp" width={mpPercentage} />
         </StatusBarContainer>
       </CurrentStatsContainer>
       <CurrentStatsContainer>
-        <StatusTimer name={stat.battleName} character={stat} />
+        <StatusTimer name={stats.battleName} character={stats} />
       </CurrentStatsContainer>
     </StatusContainer>
   )
 }
 
 HeroStats.propTypes = {
-  stat: PropTypes.shape({
+  stats: PropTypes.shape({
     agility: PropTypes.number.isRequired,
     battleName: PropTypes.string.isRequired,
     currentHp: PropTypes.number.isRequired,

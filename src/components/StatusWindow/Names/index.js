@@ -1,26 +1,22 @@
-import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { CharacterNameButton } from './styled'
 import { orderMutations } from '../../../operations/mutations'
-import { GET_WHOSE_TURN_CHARACTER_NAME } from './constants'
 
-const Names = ({ hero }) => {
-  const whoseTurnQuery = useQuery(GET_WHOSE_TURN_CHARACTER_NAME)
-  const selected = whoseTurnQuery?.data?.whoseTurn?.name === hero.name
-
+const Names = ({ name, selected }) => {
   const handleClick = () => {
     orderMutations.skipTurn()
   }
 
   return (
     <CharacterNameButton type="button" onClick={handleClick} turn={selected}>
-      {hero.name}
+      {name}
     </CharacterNameButton>
   )
 }
 
 Names.propTypes = {
-  hero: PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
 }
 
 export default Names
