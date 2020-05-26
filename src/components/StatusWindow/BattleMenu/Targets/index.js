@@ -1,145 +1,76 @@
 import { useQuery } from '@apollo/client'
-import styled from 'styled-components'
-import useAttack from '../../../../customHooks/useAttack'
+import PropTypes from 'prop-types'
 import { GET_CHARACTERS } from '../../../../operations/queries/getCharacters'
-import { black, blackTransparent2, white } from '../../../../constants/variables'
+import { NameStyled, TargetsContainerStyled } from './styled'
 
-const Targets = () => {
+const Targets = ({ targeter, typeOfAction }) => {
   const getCharactersQuery = useQuery(GET_CHARACTERS)
   const { enemies, heroes } = getCharactersQuery?.data
-  // const { attack, magicAttack } = useAttack()
   const areItemsSelected = false
-  const NamesOfHeroes = () => {
-    // const { selection } = battleMenuAction;
-    // const heroNames = []
-    // const heroClasses = {
-    //   'menu-select': true,
-    //   'attack-character': false,
-    // }
+  const NamesOfHeroes = () =>
+    heroes.map((hero) => {
+      // [TODO] see if these two could be re-worked into just one component that takes
+      // character and uses that with maybe passed in check for warn?
+      const warn =
+        typeOfAction === 'damage' ||
+        (!hero.killed && typeOfAction === 'revive') ||
+        (hero.killed && typeOfAction === 'heal')
 
-    return heroes.map((hero) => {
-      // if (!hero.killed || selection === 'items' || selection === 'magic') {
-      if (!hero.killed) {
-        return (
-          <li key={hero.battleName}>
-            <button
-              type="button"
-              onClick={() => {
-                console.log(hero)
-              }}
-              // className={classnames(heroClasses)}
-            >
-              {hero.name}
-            </button>
-          </li>
-        )
-      }
-      return null
+      return (
+        <NameStyled
+          key={hero.battleName}
+          type="button"
+          warn={warn}
+          onClick={() => {
+            completeAction(hero.battleName, targeter, typeOfAction)
+          }}
+        >
+          {hero.name}
+        </NameStyled>
+      )
     })
+
+  function completeAction (target, targeter, typeOfAction) {
+    // take care of calculating damage here
+    // take care of figuring out the type of "damage"
+    // if it's heal then add,
+    // if it's damage then subtract,
+    // if it's revive then see if dead or undead,
+    // if it's damage or heal but dead
+    console.log(target, targeter, typeOfAction)
   }
 
-  const NamesOfEnemies = () => {
-    // const enemyNames = []
+  const NamesOfEnemies = () =>
+    enemies.map((enemy) => {
+      const warn = ['heal', 'revive'].includes(typeOfAction)
 
-    return enemies.map((enemy) => {
-      if (!enemy.killed) {
-        return (
-          <li key={enemy.battleName}>
-            <button
-              type="button"
-              onClick={() => {
-                console.log(enemy)
-              }}
-              className="menu-select"
-            >
-              {enemy.name}
-            </button>
-          </li>
-        )
-      }
-      return null
+      return (
+        <NameStyled
+          key={enemy.battleName}
+          type="button"
+          warn={warn}
+          onClick={() => {
+            completeAction(enemy.battleName, targeter, typeOfAction)
+          }}
+        >
+          {enemy.name}
+        </NameStyled>
+      )
     })
-  }
 
-  // const dispatchClickEvent = (id) => {
-  //   const { typeOfAttack } = whoIsAttacking
-
-  //   switch (typeOfAttack) {
-  //     case 'magic':
-  //       magicAttack(id)
-  //       break
-  //     case 'attack':
-  //       attack(id)
-  //       break
-  //     default:
-  //       break
-  //   }
-  // }
-
-  // const isMoreThanFive = () => {
-  //   const enemyLength = enemyStats.length
-  //   const heroLength = characterStats.length
-  //   return (
-  //     (heroLength === 1 && enemyLength > 4) ||
-  //     (heroLength === 2 && enemyLength > 3) ||
-  //     (heroLength === 3 && enemyLength > 2)
-  //   )
-  // }
-
-  // const { selection } = battleMenuAction
-  // const isMagic = selection === 'magic' && magicType
-  // const areItemsSelected = selection === 'items'
-  // const menuAttackClasses = {
-  //   'battle-menu-turn': true,
-  //   'menu-attack': true,
-  //   'sub-menu': true,
-  //   'more-than-five': !!isMoreThanFive(),
-  //   'menu-items-select': areItemsSelected,
-  //   'menu-magic-targets': isMagic,
-  // }
-
-  // if (selection && (selection === 'attack' || isMagic)) {
-  //   if (isMoreThanFive()) {
-  //     return (
-  //       <div label="yeah" className={classnames(menuAttackClasses)}>
-  //         <div>
-  //           {areItemsSelected ? NamesOfHeroes() : NamesOfEnemies()}
-  //         </div>
-  //         <div>
-  //           {areItemsSelected ? NamesOfEnemies() : NamesOfHeroes()}
-  //         </div>
-  //       </div>
-  //     )
-  //   }
+  const isMoreThanFive = () => enemies.length + heroes.length > 5
 
   return (
-    <TargetsContainerStyled>
-      <div>
-        {areItemsSelected ? <NamesOfHeroes /> : <NamesOfEnemies />}
-        {areItemsSelected ? <NamesOfEnemies /> : <NamesOfHeroes />}
-      </div>
+    <TargetsContainerStyled moreThanFive={isMoreThanFive()}>
+      {areItemsSelected ? <NamesOfHeroes /> : <NamesOfEnemies />}
+      {areItemsSelected ? <NamesOfEnemies /> : <NamesOfHeroes />}
     </TargetsContainerStyled>
   )
-  // }
-
-  // return null
 }
-const TargetsContainerStyled = styled.div`
-  background-color: ${blackTransparent2};
-  border-radius: 5px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  bottom: 40px;
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
-  color: ${white};
-  display: flex;
-  flex-direction: row;
-  height: 200px;
-  left: 150px;
-  left: 40px;
-  min-width: 300px;
-  position: absolute;
-  text-shadow: 2px 1px #8a8a7b;
-  z-index: 1;
-`
+
+Targets.propTypes = {
+  targeter: PropTypes.string.isRequired,
+  typeOfAction: PropTypes.oneOf(['damage', 'heal', 'revive']).isRequired,
+}
 
 export default Targets

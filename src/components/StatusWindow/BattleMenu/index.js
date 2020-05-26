@@ -6,10 +6,9 @@ import Targets from './Targets'
 
 const BattleMenuTurn = ({ stats }) => {
   // console.log('in battle!', stats)
-  // const [action, setAction] = useState('')
-  const [showAttack, setShowAttack] = useState(false)
+  const [typeOfAction, setTypeOfAction] = useState('')
   const setMenuAction = (selection) => (whoseTurn) => {
-    setShowAttack(true)
+    setTypeOfAction(selection)
     // dispatch(
     //   setBattleMenuAction({
     //     selection
@@ -24,7 +23,7 @@ const BattleMenuTurn = ({ stats }) => {
     // );
   }
 
-  const attackClick = setMenuAction('attack')
+  const attackClick = setMenuAction('damage')
   const magicClick = setMenuAction('magic')
   const itemsClick = setMenuAction('items')
   const defendClick = () => {
@@ -62,7 +61,9 @@ const BattleMenuTurn = ({ stats }) => {
       <BattleMenuAction onClick={defendClick} stats={stats} text="Defend" />
       <BattleMenuAction onClick={itemsClick} stats={stats} text="Items" />
       <BattleMenuAction onClick={runClick} stats={stats} text="RUN!" />
-      {showAttack && <Targets />}
+      {typeOfAction === 'damage' && (
+        <Targets typeOfAction={typeOfAction} targeter={stats.battleName} />
+      )}
     </BattleMenuStyled>
   )
 }
