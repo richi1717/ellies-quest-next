@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { charactersVar } from '../../cache'
+import { enemiesVar, heroesVar } from '../../cache'
 
 export const GET_CHARACTERS = gql`
   query GetCharacters {
@@ -26,6 +26,6 @@ export const GET_HEROES = gql`
   }
 `
 
-export const getCharacterByBattleName = (battleName) => {
-  return charactersVar().filter((c) => c.battleName === battleName)?.[0]
-}
+export const getCharacterByBattleName = (battleName) =>
+  heroesVar().find((c) => c.battleName === battleName) ||
+  enemiesVar().find((c) => c.battleName === battleName)

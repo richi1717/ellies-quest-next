@@ -1,6 +1,11 @@
+import { clone } from 'lodash'
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
-import { GET_CHARACTERS } from '../../../../operations/queries/getCharacters'
+import {
+  GET_CHARACTERS,
+  getCharacterByBattleName,
+} from '../../../../operations/queries/getCharacters'
+import { characterMutations } from '../../../../operations/mutations'
 import { NameStyled, TargetsContainerStyled } from './styled'
 
 const Targets = ({ targeter, typeOfAction }) => {
@@ -30,13 +35,16 @@ const Targets = ({ targeter, typeOfAction }) => {
       )
     })
 
-  function completeAction (target, targeter, typeOfAction) {
+  function completeAction (battleName, targeter, typeOfAction) {
     // take care of calculating damage here
     // take care of figuring out the type of "damage"
     // if it's heal then add,
     // if it's damage then subtract,
     // if it's revive then see if dead or undead,
     // if it's damage or heal but dead
+    const target = clone(getCharacterByBattleName(battleName))
+    target.currentHp = 1 // something like this
+    characterMutations.updateStats(target)
     console.log(target, targeter, typeOfAction)
   }
 

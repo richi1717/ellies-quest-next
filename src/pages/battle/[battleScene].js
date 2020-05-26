@@ -20,7 +20,6 @@ const battleScenes = ['boss', 'beach', 'desert', 'forest', 'grass'] // use to re
 export default function Location ({ battleScene, enemies, heroes }) {
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
-  characterMutations.addCharacters(enemies, heroes)
   characterMutations.addEnemies(enemies)
   characterMutations.addHeroes(heroes)
   // normalBattleMusic()

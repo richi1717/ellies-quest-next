@@ -1,4 +1,3 @@
-import addCharacters from './addCharacters'
 import appendToOrder from './appendToOrder'
 import { finishTurn, skipTurn } from './setWhoseTurn'
 import updateStats from './updateStats'
@@ -20,8 +19,7 @@ export const orderMutations = {
 }
 
 export const characterMutations = {
-  addCharacters: addCharacters(charactersVar),
   addEnemies: addEnemies(enemiesVar),
   addHeroes: addHeroes(heroesVar),
-  updateStats: updateStats(charactersVar),
+  updateStats: updateStats(enemiesVar, heroesVar),
 }

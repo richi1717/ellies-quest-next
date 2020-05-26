@@ -175,7 +175,10 @@ const Enemy = (props) => {
   if (!killed) {
     return (
       <div>
-        <EnemyDisplay classes={enemy.classes} id={battleName} />
+        <EnemyDisplay classes={enemy.classes} id={battleName}>
+          {/* This is just to show that the damage update is working */}
+          <div style={{ position: 'absolute', color: 'red' }}>{enemy.currentHp}</div>
+        </EnemyDisplay>
         {/* {showDamageOverHead()} */}
       </div>
     )
