@@ -28,4 +28,4 @@ export const GET_HEROES = gql`
 
 export const getCharacterByBattleName = (battleName) =>
   heroesVar().find((c) => c.battleName === battleName) ||
-  enemiesVar().find((c) => c.battleName === battleName)
+  enemiesVar().find((c) => c?.battleName === battleName)

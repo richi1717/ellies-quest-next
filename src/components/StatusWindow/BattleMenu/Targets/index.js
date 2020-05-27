@@ -1,17 +1,14 @@
-import { clone } from 'lodash'
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
-import {
-  GET_CHARACTERS,
-  getCharacterByBattleName,
-} from '../../../../operations/queries/getCharacters'
-import { characterMutations } from '../../../../operations/mutations'
+import { completeAction } from './helpers'
+import { GET_CHARACTERS } from '../../../../operations/queries/getCharacters'
 import { NameStyled, TargetsContainerStyled } from './styled'
 
 const Targets = ({ targeter, typeOfAction }) => {
   const getCharactersQuery = useQuery(GET_CHARACTERS)
   const { enemies, heroes } = getCharactersQuery?.data
   const areItemsSelected = false
+
   const NamesOfHeroes = () =>
     heroes.map((hero) => {
       // [TODO] see if these two could be re-worked into just one component that takes
@@ -34,19 +31,6 @@ const Targets = ({ targeter, typeOfAction }) => {
         </NameStyled>
       )
     })
-
-  function completeAction (battleName, targeter, typeOfAction) {
-    // take care of calculating damage here
-    // take care of figuring out the type of "damage"
-    // if it's heal then add,
-    // if it's damage then subtract,
-    // if it's revive then see if dead or undead,
-    // if it's damage or heal but dead
-    const target = clone(getCharacterByBattleName(battleName))
-    target.currentHp = 1 // something like this
-    characterMutations.updateStats(target)
-    console.log(target, targeter, typeOfAction)
-  }
 
   const NamesOfEnemies = () =>
     enemies.map((enemy) => {
@@ -78,7 +62,7 @@ const Targets = ({ targeter, typeOfAction }) => {
 
 Targets.propTypes = {
   targeter: PropTypes.string.isRequired,
-  typeOfAction: PropTypes.oneOf(['damage', 'heal', 'revive']).isRequired,
+  typeOfAction: PropTypes.oneOf(['damage', 'heal', 'magicDamage', 'revive']).isRequired,
 }
 
 export default Targets

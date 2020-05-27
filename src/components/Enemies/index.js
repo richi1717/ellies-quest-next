@@ -9,8 +9,8 @@ const Enemies = () => {
 
   return (
     <EnemiesContainer>
-      {enemies.map((enemy, index) => (
-        <Enemy position={index + 1} key={enemy.id} enemy={enemy} />
+      {enemies.map((enemy) => (
+        <Enemy position={enemy.position} key={enemy.id} enemy={enemy} />
       ))}
     </EnemiesContainer>
   )

@@ -3,6 +3,7 @@ export default function addEnemies (enemiesVar) {
     enemies.forEach((enemy, idx) => {
       if (!enemy?.battleName) {
         enemy.battleName = `enemy${idx + 1}`
+        enemy.position = idx + 1
       }
     })
     enemiesVar(enemies)

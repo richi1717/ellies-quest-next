@@ -25,6 +25,7 @@ export const useTimer = (timer, character, format) => {
 const useRestartTimer = (battleName, timerDisplay) => {
   const restartQuery = useQuery(GET_RESTARTING_NAME)
   const whoShouldRestartTimer = restartQuery?.data?.whoShouldRestartTimer
+
   useEffect(() => {
     if (whoShouldRestartTimer === battleName) {
       timerDisplay()

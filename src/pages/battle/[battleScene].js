@@ -1,9 +1,8 @@
 // import useSWR from 'swr'
 import { random, sampleSize } from 'lodash'
-import { useQuery } from '@apollo/client'
 import fetch from 'node-fetch'
 import PropTypes from 'prop-types'
-import { BattleContainer, Container, GlobalStyle, InfoBar } from '../../pagesStyled'
+import { BattleContainer, Container, GlobalStyle } from '../../pagesStyled'
 import { characterMutations } from '../../operations/mutations'
 import { normalBattleMusic } from '../../helpers/soundEffects'
 import {
@@ -13,13 +12,11 @@ import {
 import Enemies from '../../components/Enemies'
 import Heroes from '../../components/Heroes'
 import StatusWindow from '../../components/StatusWindow'
-import { GET_WHOSE_TURN } from '../../operations/queries/getWhoseTurn'
+import Header from '../../components/Header'
 
 const battleScenes = ['boss', 'beach', 'desert', 'forest', 'grass'] // use to redirect to different tests
 
 export default function Location ({ battleScene, enemies, heroes }) {
-  const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
-  const whoseTurn = whoseTurnQuery?.data?.whoseTurn
   characterMutations.addEnemies(enemies)
   characterMutations.addHeroes(heroes)
   // normalBattleMusic()
@@ -28,7 +25,7 @@ export default function Location ({ battleScene, enemies, heroes }) {
     <>
       <GlobalStyle />
       <Container battleScene={battleScene}>
-        {whoseTurn?.name && <InfoBar>{whoseTurn?.name}'s turn</InfoBar>}
+        <Header />
         <BattleContainer>
           <Enemies />
           <Heroes />

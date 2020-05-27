@@ -17,8 +17,8 @@ import { getCharacterByBattleName } from '../../../operations/queries/getCharact
 // import { damageCalculation, getBaseDamage } from '../helpers/damage-calc';
 
 const Hero = ({ hero, position }) => {
-  // console.log(hero)
-  const { battleName } = hero
+  // console.log({ hero })
+  const { battleName, killed } = hero
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
 
   const { magicType } = 'attack' // ????
@@ -122,31 +122,26 @@ const Hero = ({ hero, position }) => {
 
   // console.log({ HEROwhoseTurn: whoseTurn })
   // const { target, attacker, typeOfAttack } = whoseTurn
-  // const isHeroAttacking =
+  // const attacking =
   //   target && whoseTurn?.battleName === attackerId && typeOfAttack === 'attack'
-  // const isHeroAttacking = target && attacker === attackerId && typeOfAttack === 'attack'
+  // const attacking = target && attacker === attackerId && typeOfAttack === 'attack'
   // const isHeroUsingMagic =
   //   target && whoseTurn?.battleName === attackerId && typeOfAttack === 'magic'
 
-  // isHeroAttacking && setHeroAttackingAnimation()
+  // attacking && setHeroAttackingAnimation()
   // isHeroUsingMagic && setHeroMAgicAttackingAnimation()
 
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
   const heroInfo = {
     position,
-    killed: false, // check it
-    defending: hero.isDefending,
-    // attacker,
+    killed,
+    defending: hero.defending,
     attackerId: battleName,
-    // target,
-    isHeroAttacking: whoseTurn?.battleName === battleName,
+    attacking: whoseTurn?.battleName === battleName,
     name: hero.classes,
   }
-  // console.log(whoseTurn?.battleName, battleName)
-  // console.log({ heroInfo, isHeroAttacking })
-  // console.log('here'.repeat(20), whoseTurn.attacker, attackerId, props)
   return (
-    <HeroStyled {...heroInfo}>
+    <HeroStyled id={battleName} {...heroInfo}>
       <DamageDisplay amount={200} isDamage={true} position={position} />
     </HeroStyled>
   )
@@ -172,6 +167,7 @@ Hero.propTypes = {
     currentHp: PropTypes.number.isRequired,
     currentMp: PropTypes.number.isRequired,
     def: PropTypes.number.isRequired,
+    defending: PropTypes.bool,
     evade: PropTypes.number.isRequired,
     exp: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,

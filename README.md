@@ -80,3 +80,56 @@ You can check out [the Next.js GitHub repository](https://github.com/zeit/next.j
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+# Changelog
+
+## #0.1.1
+
+- components/Enemies
+  - Remove index from enemy mapping and use enemy.position for position
+- components/Heroes
+  - add id to HeroesContainer
+- components/Heroes/Hero
+  - add killed logic
+  - change styled-component props from isHeroAttacking to attacking
+  - clean up comments
+  - add id to component
+  - add defending to propTypes
+- components/Heroes/Hero/styled.js
+  - remove position: relative that was overridden
+  - add background-position-x logic based off of attacking, killed, or defending props
+- components/StatusWindow/BattleMenu
+  - rename component BattleMenuTurn -> BattleMenu
+  - clean up commented out code
+  - add lodash clone
+  - add logic to defendClick to clone hero, set defending to true, call updateHeroStats,
+    and call finishTurn
+- components/StatusWindow/BattleMenu/Targets
+  - clean up and extract completeAction to helpers.js
+  - add 'magicDamage' to list of typeOfAction propTypes
+  - add helpers.js to handle different types of actions
+- helpers/damageCalc.js
+  - remove attacker.level check and just use calcLevel
+  - tweak numbers
+    - damageCalculation power 3.1, 3.6 up from 2.9, 3.3 and 1.9, 2.5 up from 1.8, 2.7
+    - add defending check and cut damage in half
+  - add magicHealthCalculation to calculate how much health to increase
+- operations/mutations/addEnemies.js
+  - set enemy.position instead of using index in Enemies map
+- operations/mutations
+  - add updateHeroStats and killCharacter
+  - remove charactersVar
+- operations/mutations/updateStats.js
+  - change battleName destructure to optional chaining
+  - add updateHeroStats to just update heroes instead of having to loop over enemies as well
+- operations/queries/getCharacters.js
+  - add optional chaining to enemies find check
+- pages/battle/[battleScene].js
+  - extract logic for header into components/Header
+- pagesStyled
+  - remove unused import and styles for Header
+- components/Header
+  - add Header and styles for Header
+- operations/mutations/killCharacter.js
+  - add killCharacter
+  - add logic for killing enemies or heroes

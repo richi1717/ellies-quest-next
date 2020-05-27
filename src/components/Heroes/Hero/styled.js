@@ -5,7 +5,6 @@ const setBackgroundPos = (x, y) => `${multiplier(x)} ${multiplier(y)}`
 
 export const HeroStyled = styled.div`
   flex: 0.5;
-  position: relative;
   z-index: 1;
   transition: top 1s ease, left 1s ease;
   position: absolute;
@@ -30,6 +29,8 @@ export const HeroStyled = styled.div`
     }
     return obj[name]
   }};
-  left: ${(props) => props.isHeroAttacking && 0};
-  background-position-x: ${(props) => props.isHeroAttacking && multiplier(1)};
+  left: ${(props) => props.attacking && 0};
+  background-position-x: ${(props) => props.attacking && multiplier(1)};
+  background-position-x: ${(props) => props.killed && multiplier(6)};
+  background-position-x: ${(props) => props.defending && !props.attacking && multiplier(3)};
 `

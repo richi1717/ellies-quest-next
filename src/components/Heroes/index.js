@@ -8,7 +8,7 @@ const Heroes = () => {
   const heroes = data?.heroes
 
   return (
-    <HeroesContainer>
+    <HeroesContainer id="heroesContainer">
       {heroes?.map((hero, index) => (
         <Hero position={index + 1} key={hero.id} hero={hero} />
       ))}

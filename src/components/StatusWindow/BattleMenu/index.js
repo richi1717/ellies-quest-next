@@ -1,35 +1,29 @@
 import { useState } from 'react'
+import { clone } from 'lodash'
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { ActionStyled, BattleMenuStyled } from './styled'
 import Targets from './Targets'
+import { characterMutations, orderMutations } from '../../../operations/mutations'
 
-const BattleMenuTurn = ({ stats }) => {
+const BattleMenu = ({ stats }) => {
   // console.log('in battle!', stats)
   const [typeOfAction, setTypeOfAction] = useState('')
-  const setMenuAction = (selection) => (whoseTurn) => {
+  const setMenuAction = (selection) => () => {
     setTypeOfAction(selection)
-    // dispatch(
-    //   setBattleMenuAction({
-    //     selection
-    //   })
-    // );
-    // dispatch(
-    //   setAttackerAndTarget({
-    //     whoseTurn,
-    //     target,
-    //     typeOfAttack: selection
-    //   })
-    // );
   }
 
   const attackClick = setMenuAction('damage')
   const magicClick = setMenuAction('magic')
   const itemsClick = setMenuAction('items')
+
   const defendClick = () => {
-    console.log('defended!')
-    // set defending
+    const hero = clone(stats)
+    hero.defending = true
+    characterMutations.updateHeroStats(hero)
+    orderMutations.finishTurn()
   }
+
   const runClick = setMenuAction('run')
 
   const BattleMenuAction = ({ onClick, stats, text, unable }) => (
@@ -68,8 +62,8 @@ const BattleMenuTurn = ({ stats }) => {
   )
 }
 
-BattleMenuTurn.propTypes = {
+BattleMenu.propTypes = {
   stats: PropTypes.object.isRequired,
 }
 
-export default BattleMenuTurn
+export default BattleMenu

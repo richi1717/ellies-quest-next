@@ -2,8 +2,9 @@ export default function updateStats (enemiesVar, heroesVar) {
   return (character) => {
     const enemies = enemiesVar()
     const heroes = heroesVar()
+
     const foundEnemy = enemies.findIndex(
-      ({ battleName }) => battleName === character.battleName
+      (enemy) => enemy?.battleName === character.battleName
     )
 
     if (foundEnemy >= 0) {
@@ -16,9 +17,25 @@ export default function updateStats (enemiesVar, heroesVar) {
       )
       if (foundHero >= 0) {
         const newHeroes = [...heroes]
-        newHeroes[foundEnemy] = character
+        newHeroes[foundHero] = character
         heroesVar(newHeroes)
       }
+    }
+  }
+}
+
+export function updateHeroStats (heroesVar) {
+  return (character) => {
+    const heroes = heroesVar()
+
+    const foundHero = heroes.findIndex(
+      ({ battleName }) => battleName === character.battleName
+    )
+
+    if (foundHero >= 0) {
+      const newHeroes = [...heroes]
+      newHeroes[foundHero] = character
+      return heroesVar(newHeroes)
     }
   }
 }
