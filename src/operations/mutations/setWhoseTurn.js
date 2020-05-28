@@ -3,7 +3,7 @@ import { characterMutations } from '.'
 
 function resetDefending (character) {
   if (character.battleName.includes('hero')) {
-    character.defending = false
+    delete character.defending
     characterMutations.updateStats(character)
   }
 }
