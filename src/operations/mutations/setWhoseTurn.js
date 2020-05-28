@@ -1,4 +1,12 @@
 import { isEmpty } from 'lodash'
+import { characterMutations } from '.'
+
+function resetDefending (character) {
+  if (character.battleName.includes('hero')) {
+    character.defending = false
+    characterMutations.updateStats(character)
+  }
+}
 
 export function skipTurn (orderVar, whoseTurnVar) {
   return () => {
@@ -11,6 +19,8 @@ export function skipTurn (orderVar, whoseTurnVar) {
       newOrder.push(turn)
     }
 
+    resetDefending(whoseTurn)
+
     orderVar(newOrder)
     whoseTurnVar(whoseTurn)
   }
@@ -22,6 +32,8 @@ export function finishTurn (orderVar, whoShouldRestartTimerVar, whoseTurnVar) {
     const order = orderVar()
     const whoseTurn = order.shift()
     const newOrder = [...order]
+
+    resetDefending(whoseTurn)
 
     orderVar(newOrder)
     whoseTurnVar(whoseTurn)

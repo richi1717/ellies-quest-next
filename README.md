@@ -83,6 +83,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 # Changelog
 
+## #0.1.2
+
+- operations/mutations/setWhoseTurn.js
+  - add resetDefending function to reset hero defending "status"
+
 ## #0.1.1
 
 - components/Enemies
