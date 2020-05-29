@@ -32,3 +32,7 @@ const useRestartTimer = (battleName, timerDisplay) => {
     }
   }, [whoShouldRestartTimer])
 }
+
+const useDelayedAction = (action) => {
+  setTimeout(action, 1000)
+}

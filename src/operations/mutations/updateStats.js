@@ -15,6 +15,7 @@ export default function updateStats (enemiesVar, heroesVar) {
       const foundHero = heroes.findIndex(
         ({ battleName }) => battleName === character.battleName
       )
+
       if (foundHero >= 0) {
         const newHeroes = [...heroes]
         newHeroes[foundHero] = character

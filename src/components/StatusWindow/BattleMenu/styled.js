@@ -10,7 +10,7 @@ import {
 export const ActionStyled = styled.button`
   background: none;
   border: none;
-  color: ${(props) => (props.unable ? gray : white)};
+  color: ${white};
   font-family: ${fontFamily};
   font-size: 22pt;
   margin-bottom: -5px;
@@ -23,6 +23,14 @@ export const ActionStyled = styled.button`
   &:hover {
     cursor: pointer;
     color: blue; // just to show what is selected, change to a real color [TODO]
+  }
+  &:disabled {
+    cursor: default;
+    color: ${gray};
+    text-shadow: 2px 1px ${black};
+    &:hover {
+      cursor: default;
+    }
   }
 `
 export const BattleMenuStyled = styled.div`

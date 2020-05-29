@@ -1,10 +1,12 @@
 import { isEmpty } from 'lodash'
 import { characterMutations } from '.'
+import { getCharacterByBattleName } from '../queries/getCharacters'
 
-function resetDefending (character) {
-  if (character.battleName.includes('hero')) {
-    delete character.defending
-    characterMutations.updateStats(character)
+function resetDefending (character, heroesVar) {
+  if (character?.battleName.includes('hero')) {
+    const hero = getCharacterByBattleName(character.battleName)
+    delete hero.defending
+    characterMutations.updateStats(hero)
   }
 }
 

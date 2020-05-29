@@ -4,7 +4,7 @@ import { completeAction } from './helpers'
 import { GET_CHARACTERS } from '../../../../operations/queries/getCharacters'
 import { NameStyled, TargetsContainerStyled } from './styled'
 
-const Targets = ({ targeter, typeOfAction }) => {
+const Targets = ({ targeter, typeOfAction, typeOfMagic }) => {
   const getCharactersQuery = useQuery(GET_CHARACTERS)
   const { enemies, heroes } = getCharactersQuery?.data
   const areItemsSelected = false
@@ -15,6 +15,7 @@ const Targets = ({ targeter, typeOfAction }) => {
       // character and uses that with maybe passed in check for warn?
       const warn =
         typeOfAction === 'damage' ||
+        typeOfAction === 'magicDamage' ||
         (!hero.killed && typeOfAction === 'revive') ||
         (hero.killed && typeOfAction === 'heal')
 
@@ -24,7 +25,7 @@ const Targets = ({ targeter, typeOfAction }) => {
           type="button"
           warn={warn}
           onClick={() => {
-            completeAction(hero.battleName, targeter, typeOfAction)
+            completeAction(hero.battleName, targeter, typeOfAction, typeOfMagic)
           }}
         >
           {hero.name}
@@ -42,7 +43,7 @@ const Targets = ({ targeter, typeOfAction }) => {
           type="button"
           warn={warn}
           onClick={() => {
-            completeAction(enemy.battleName, targeter, typeOfAction)
+            completeAction(enemy.battleName, targeter, typeOfAction, typeOfMagic)
           }}
         >
           {enemy.name}
@@ -61,8 +62,12 @@ const Targets = ({ targeter, typeOfAction }) => {
 }
 
 Targets.propTypes = {
-  targeter: PropTypes.string.isRequired,
+  targeter: PropTypes.object.isRequired,
   typeOfAction: PropTypes.oneOf(['damage', 'heal', 'magicDamage', 'revive']).isRequired,
+  typeOfMagic: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    cost: PropTypes.number.isRequired,
+  }),
 }
 
 export default Targets

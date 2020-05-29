@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 // import classnames from 'classnames'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
-import { HeroStyled } from './styled'
+import { HeroStyled, TurnStyled } from './styled'
 import {
   cureMagicFX,
   fireMagicFX,
@@ -132,16 +132,18 @@ const Hero = ({ hero, position }) => {
   // isHeroUsingMagic && setHeroMAgicAttackingAnimation()
 
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
+  const attacking = whoseTurn?.battleName === battleName
   const heroInfo = {
     position,
     killed,
     defending: hero.defending,
     attackerId: battleName,
-    attacking: whoseTurn?.battleName === battleName,
+    attacking,
     name: hero.classes,
   }
   return (
     <HeroStyled id={battleName} {...heroInfo}>
+      {attacking && <TurnStyled />}
       <DamageDisplay amount={200} isDamage={true} position={position} />
     </HeroStyled>
   )

@@ -3,6 +3,7 @@ import { clone } from 'lodash'
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { ActionStyled, BattleMenuStyled } from './styled'
+import Magic from './Magic'
 import Targets from './Targets'
 import { characterMutations, orderMutations } from '../../../operations/mutations'
 
@@ -26,8 +27,8 @@ const BattleMenu = ({ stats }) => {
 
   const runClick = setMenuAction('run')
 
-  const BattleMenuAction = ({ onClick, stats, text, unable }) => (
-    <ActionStyled type="button" onClick={() => onClick(stats)} unable={unable}>
+  const BattleMenuAction = ({ onClick, stats, text, disabled }) => (
+    <ActionStyled type="button" onClick={() => onClick(stats)} disabled={disabled}>
       {text}
     </ActionStyled>
   )
@@ -36,11 +37,11 @@ const BattleMenu = ({ stats }) => {
     onClick: PropTypes.func.isRequired,
     stats: PropTypes.object.isRequired,
     text: PropTypes.string.isRequired,
-    unable: PropTypes.bool,
+    disabled: PropTypes.bool,
   }
 
   BattleMenuAction.defaultProps = {
-    unable: false,
+    disabled: false,
   }
 
   return (
@@ -50,14 +51,15 @@ const BattleMenu = ({ stats }) => {
         onClick={magicClick}
         stats={stats}
         text="Magic"
-        unable={!stats.magicAbilities}
+        disabled={!stats.magicAbilities}
       />
       <BattleMenuAction onClick={defendClick} stats={stats} text="Defend" />
       <BattleMenuAction onClick={itemsClick} stats={stats} text="Items" />
       <BattleMenuAction onClick={runClick} stats={stats} text="RUN!" />
       {typeOfAction === 'damage' && (
-        <Targets typeOfAction={typeOfAction} targeter={stats.battleName} />
+        <Targets typeOfAction={typeOfAction} targeter={stats} />
       )}
+      {typeOfAction === 'magic' && <Magic targeter={stats} />}
     </BattleMenuStyled>
   )
 }

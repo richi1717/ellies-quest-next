@@ -39,7 +39,6 @@ export const TargetsContainerStyled = styled.div`
   flex-wrap: wrap;
   height: 200px;
   justify-content: flex-start;
-  left: 150px;
   left: 40px;
   min-width: ${(props) => (props.moreThanFive ? 600 : 300)}px;
   position: absolute;

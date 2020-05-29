@@ -12,10 +12,10 @@ function dealDamage (target, targeter) {
   target.currentHp -= dmg
 
   if (target.currentHp <= 0) {
-    return characterMutations.killCharacter(target)
+    characterMutations.killCharacter(target)
+  } else {
+    characterMutations.updateStats(target)
   }
-
-  characterMutations.updateStats(target)
   // [TODO] change .defending of hero to false
   // const targetEl = document.getElementById(target.battleName)
   // const targeterEl = document.getElementById(targeter.battleName)
@@ -24,28 +24,37 @@ function dealDamage (target, targeter) {
   return orderMutations.finishTurn()
 }
 
-function dealMagicDamage (target, targeter) {
+// [TODO} adding typeOfMagic to args for later calculating element resistance and vulnerabilities
+function dealMagicDamage (target, targeter, typeOfMagic) {
   const dmg = magicDamageCalculation(targeter, target)
   target.currentHp -= dmg
+  targeter.currentMp -= typeOfMagic.cost
 
   if (target.currentHp <= 0) {
-    return characterMutations.killCharacter(target)
+    characterMutations.killCharacter(target)
+  } else {
+    characterMutations.updateStats(targeter)
+    characterMutations.updateStats(target)
   }
-
-  return characterMutations.updateStats(target)
+  return orderMutations.finishTurn()
 }
 
-function healTarget (target, targeter) {
+function healTarget (target, targeter, typeOfMagic) {
   const dmg = magicHealCalculation(targeter)
   target.currentHp += dmg
+  targeter.currentMp -= typeOfMagic.cost
+
   if (target.maxHp < target.currentHp) {
     target.currentHp = target.maxHp
   }
 
-  return characterMutations.updateStats(target)
+  characterMutations.updateStats(targeter)
+  characterMutations.updateStats(target)
+  return orderMutations.finishTurn()
 }
 
-export function completeAction (battleName, initiator, typeOfAction) {
+export function completeAction (battleName, initiator, typeOfAction, typeOfMagic) {
+  // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
   // take care of figuring out the type of "damage"
   // if it's heal then add,
@@ -53,17 +62,16 @@ export function completeAction (battleName, initiator, typeOfAction) {
   // if it's revive then see if dead or undead,
   // if it's damage or heal but dead
   const target = clone(getCharacterByBattleName(battleName))
-  const targeter = clone(getCharacterByBattleName(initiator))
+  const targeter = clone(initiator)
 
-  if (typeOfAction === 'damage') {
-    return dealDamage(target, targeter)
-  }
-
-  if (typeOfAction === 'magicDamage') {
-    return dealMagicDamage(target, targeter)
-  }
-
-  if (typeOfAction === 'heal') {
-    return healTarget(target, targeter)
+  switch (typeOfAction) {
+    case 'damage':
+      return dealDamage(target, targeter)
+    case 'magicDamage':
+      return dealMagicDamage(target, targeter, typeOfMagic)
+    case 'heal':
+      return healTarget(target, targeter, typeOfMagic)
+    default:
+      return dealDamage(target, targeter)
   }
 }

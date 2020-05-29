@@ -83,6 +83,47 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 # Changelog
 
+## #0.1.3
+
+- MOVE components/BattleMenuMagic.js -> components/StatusWindow/BattleMenu/Magic
+
+  - add logic to render magic name and cost
+  - add logic to select magic
+  - add logic to set typeOfAction and typeOfMagic
+  - add Targets
+
+- components/Heroes/Hero
+
+  - add turn indicator (fading yellow triangle)
+
+- components/StatusWindow/BattleMenu/Targets
+
+  - helpers.js
+    - update calculations to include magic and subtract mp cost
+    - update calculations to add healing
+  - index.js
+    - update propTypes to include typeOfMagic and targeter object instead of string
+    - update calls to completeAction to include typeOfMagic
+  - styled.js
+    - remove duplicate left property
+
+- components/StatusWindow/BattleMenu
+
+  - change unable to disabled
+  - update styles to use disabled
+  - add magic render when selected
+
+- hooks
+
+  - add useDelayedAction for future use in animations
+
+- operations/mutations/setWhoseTurn.js
+
+  - update resetDefending to update character instead of whoseTurn character
+
+- operations/mutations/updateStats.js
+  - fix spacing
+
 ## #0.1.2
 
 - operations/mutations/setWhoseTurn.js
