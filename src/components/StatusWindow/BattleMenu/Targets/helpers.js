@@ -1,7 +1,13 @@
 import { clone } from 'lodash'
-import { characterMutations, orderMutations } from '../../../../operations/mutations'
+import {
+  characterMutations,
+  itemMutations,
+  orderMutations,
+} from '../../../../operations/mutations'
 import {
   damageCalculation,
+  itemHpCalculation,
+  itemMpCalculation,
   magicDamageCalculation,
   magicHealCalculation,
 } from '../../../../helpers/damageCalc'
@@ -36,24 +42,80 @@ function dealMagicDamage (target, targeter, typeOfMagic) {
     characterMutations.updateStats(targeter)
     characterMutations.updateStats(target)
   }
+
+  return orderMutations.finishTurn()
+}
+
+function dealItemDamage (target, targeter, item) {
+  target.currentHp -= item.damage
+
+  if (target.currentHp <= 0) {
+    characterMutations.killCharacter(target)
+  } else {
+    characterMutations.updateStats(target)
+  }
+
+  if (item) {
+    const clonedItem = clone(item)
+    clonedItem.amount -= 1
+    itemMutations.updateItems(clonedItem)
+  }
+
   return orderMutations.finishTurn()
 }
 
 function healTarget (target, targeter, typeOfMagic) {
   const dmg = magicHealCalculation(targeter)
   target.currentHp += dmg
-  targeter.currentMp -= typeOfMagic.cost
 
   if (target.maxHp < target.currentHp) {
     target.currentHp = target.maxHp
   }
 
-  characterMutations.updateStats(targeter)
+  if (typeOfMagic) {
+    targeter.currentMp -= typeOfMagic.cost
+    characterMutations.updateStats(targeter)
+  }
+
   characterMutations.updateStats(target)
   return orderMutations.finishTurn()
 }
 
-export function completeAction (battleName, initiator, typeOfAction, typeOfMagic) {
+function itemHealTarget (target, item) {
+  item.restore.map((statToRestore) => {
+    if (statToRestore === 'HP') {
+      let hp = item.str
+      if (item.percentage) {
+        hp = itemHpCalculation(target.maxHp, item.percentage)
+      }
+      target.currentHp += hp
+      return target
+    }
+    if (statToRestore === 'MP') {
+      let mp = item.str
+      if (item.percentage) {
+        mp = itemMpCalculation(target.maxHp, item.percentage)
+      }
+      target.currentMp += mp
+      return target
+    }
+  })
+  if (target.maxHp < target.currentHp) {
+    target.currentHp = target.maxHp
+  }
+
+  if (target.maxMp < target.currentMp) {
+    target.currentMp = target.maxMp
+  }
+
+  const clonedItem = clone(item)
+  clonedItem.amount -= 1
+  itemMutations.updateItems(clonedItem)
+  characterMutations.updateStats(target)
+  return orderMutations.finishTurn()
+}
+
+export function completeAction (battleName, initiator, typeOfAction, typeOfMagic, item) {
   // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
   // take care of figuring out the type of "damage"
@@ -67,10 +129,16 @@ export function completeAction (battleName, initiator, typeOfAction, typeOfMagic
   switch (typeOfAction) {
     case 'damage':
       return dealDamage(target, targeter)
+    case 'itemDamage':
+      return dealItemDamage(target, targeter, item)
     case 'magicDamage':
       return dealMagicDamage(target, targeter, typeOfMagic)
-    case 'heal':
+    case 'heal': {
+      if (item) {
+        return itemHealTarget(target, item)
+      }
       return healTarget(target, targeter, typeOfMagic)
+    }
     default:
       return dealDamage(target, targeter)
   }

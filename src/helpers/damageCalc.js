@@ -46,3 +46,6 @@ export const magicHealCalculation = (targeter) => {
   const base = getBaseMagicDamage(targeter)
   return Math.ceil((power * 512 * base) / (1.5 * 512))
 }
+
+export const itemHpCalculation = (maxHp, percentage) => Math.ceil(maxHp * percentage)
+export const itemMpCalculation = (maxMp, percentage) => Math.ceil(maxMp * percentage)

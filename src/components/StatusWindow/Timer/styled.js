@@ -7,8 +7,9 @@ import {
 } from '../../../constants/variables'
 
 export const StatusBarContainer = styled.div`
-  height: 5px;
   background-color: ${redTransparent};
+  border-radius: 10px;
+  height: 5px;
 `
 
 export const StatusBar = styled.div`

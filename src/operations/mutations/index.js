@@ -5,12 +5,14 @@ import killCharacter from './killCharacter'
 import {
   enemiesVar,
   heroesVar,
+  itemsVar,
   orderVar,
   whoseTurnVar,
   whoShouldRestartTimerVar,
 } from '../../cache'
 import addEnemies from './addEnemies'
 import addHeroes from './addHeroes'
+import { addItems, updateItems } from './items'
 
 export const orderMutations = {
   append: appendToOrder(orderVar, whoseTurnVar),
@@ -24,4 +26,9 @@ export const characterMutations = {
   killCharacter: killCharacter(enemiesVar, heroesVar, orderVar),
   updateHeroStats: updateHeroStats(heroesVar),
   updateStats: updateStats(enemiesVar, heroesVar),
+}
+
+export const itemMutations = {
+  addItems: addItems(itemsVar),
+  updateItems: updateItems(itemsVar),
 }

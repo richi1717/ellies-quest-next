@@ -85,6 +85,90 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## #0.1.3
 
+- DELETE public/img/battle-sprites.png
+- DELETE public/img/mario.gif
+- DELETE public/img/mario.png
+- DELETE public/img/ssscroll.png
+- DELETE public/sprites
+- DELETE src/constants/databaseUrls.js
+
+- ADD next.config.js
+
+  - add dbCharacters,dbEnemies, and dbItems
+
+- package.json
+
+  - add lint script
+
+- cache.js
+
+  - add itemsVar and items
+
+- helpers/damageCalc.js
+
+  - add itemHpCalculation
+  - add itemMpCalculation
+
+- components/StatusWindow/BattleMenu/Magic
+
+  - add styledComponents from styled.js
+  - remove styledComponents from index.js
+
+- components/StatusWindow/BattleMenu/Targets
+
+  - helpers.js
+
+    - add dealItemDamage and logic
+    - move mp logic for healTarget into check if typeOfMagic
+    - add itemHealTarget and logic
+    - add item to completeAction args
+    - add itemDamage to switch
+    - add check for item in switch heal
+
+  - index.js
+
+    - add item and sub to props
+    - change warn logic to includes and add itemDamage to list
+    - add item to completeAction args
+    - add sub to styledComponent
+    - update PropTypes typeOfAction list
+    - set sub defaultProp
+
+  - styled.js
+
+    - remove unused styles
+    - add props.sub logic to bottom and left styles
+
+- MOVE components/BattleMenuItem.js -> components/StatusWindow/BattleMenu/Item
+
+  - add logic to render item name and amount
+  - add logic to select item
+  - add logic to set typeOfAction and selectedItem
+  - add Targets
+
+- operations/mutations
+
+  - add items.js and logic to add items and update amount
+  - add addItem and updateItems to itemMutations
+  - update logic and dependencies for resetDefending in setWhoseTurn.js
+
+- operations/queries
+
+  - add getItems.js
+
+- components/BattleMenu/index.js
+
+  - move BattleMenuAction out of BattleMenu
+  - remove console.log
+  - add Items
+  - update all status bar border-radius to 10px
+
+- pages/battle/[battleScene].js
+  - add itemMutations call
+  - remove constants import and use process.env instead for urls
+
+## #0.1.3
+
 - MOVE components/BattleMenuMagic.js -> components/StatusWindow/BattleMenu/Magic
 
   - add logic to render magic name and cost

@@ -13,7 +13,6 @@ export const NameStyled = styled.button`
   color: ${(props) => (props.warn ? yellowTransparent : white)};
   font-family: ${fontFamily};
   font-size: 22pt;
-  list-style-type: none;
   margin-bottom: -5px;
   margin-bottom: 4px;
   margin-top: 0px;
@@ -31,7 +30,7 @@ export const TargetsContainerStyled = styled.div`
   background-color: ${blackTransparent2};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  bottom: 40px;
+  bottom: ${(props) => (props.sub ? 80 : 40)}px;
   box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
   color: ${white};
   display: flex;
@@ -39,7 +38,7 @@ export const TargetsContainerStyled = styled.div`
   flex-wrap: wrap;
   height: 200px;
   justify-content: flex-start;
-  left: 40px;
+  left: ${(props) => (props.sub ? 80 : 40)}px;
   min-width: ${(props) => (props.moreThanFive ? 600 : 300)}px;
   position: absolute;
   text-shadow: 2px 1px #8a8a7b;

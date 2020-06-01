@@ -1,14 +1,30 @@
-import { useState } from 'react'
 import { clone } from 'lodash'
-import { useQuery } from '@apollo/client'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { ActionStyled, BattleMenuStyled } from './styled'
+import { characterMutations, orderMutations } from '../../../operations/mutations'
+import Items from './Items'
 import Magic from './Magic'
 import Targets from './Targets'
-import { characterMutations, orderMutations } from '../../../operations/mutations'
+
+const BattleMenuAction = ({ onClick, stats, text, disabled }) => (
+  <ActionStyled type="button" onClick={() => onClick(stats)} disabled={disabled}>
+    {text}
+  </ActionStyled>
+)
+
+BattleMenuAction.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  stats: PropTypes.object.isRequired,
+  text: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+}
+
+BattleMenuAction.defaultProps = {
+  disabled: false,
+}
 
 const BattleMenu = ({ stats }) => {
-  // console.log('in battle!', stats)
   const [typeOfAction, setTypeOfAction] = useState('')
   const setMenuAction = (selection) => () => {
     setTypeOfAction(selection)
@@ -27,23 +43,6 @@ const BattleMenu = ({ stats }) => {
 
   const runClick = setMenuAction('run')
 
-  const BattleMenuAction = ({ onClick, stats, text, disabled }) => (
-    <ActionStyled type="button" onClick={() => onClick(stats)} disabled={disabled}>
-      {text}
-    </ActionStyled>
-  )
-
-  BattleMenuAction.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    stats: PropTypes.object.isRequired,
-    text: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-  }
-
-  BattleMenuAction.defaultProps = {
-    disabled: false,
-  }
-
   return (
     <BattleMenuStyled>
       <BattleMenuAction onClick={attackClick} stats={stats} text="Attack" />
@@ -60,6 +59,7 @@ const BattleMenu = ({ stats }) => {
         <Targets typeOfAction={typeOfAction} targeter={stats} />
       )}
       {typeOfAction === 'magic' && <Magic targeter={stats} />}
+      {typeOfAction === 'items' && <Items targeter={stats} />}
     </BattleMenuStyled>
   )
 }
