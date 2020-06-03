@@ -6,6 +6,7 @@ export const GET_CHARACTERS = gql`
     heroes @client {
       battleName
       name
+      killed
     }
     enemies @client {
       battleName

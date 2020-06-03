@@ -115,6 +115,35 @@ function itemHealTarget (target, item) {
   return orderMutations.finishTurn()
 }
 
+function reviveTarget (target, targeter, typeOfMagic) {
+  const dmg = magicHealCalculation(targeter)
+  target.currentHp += dmg
+  target.killed = false
+
+  if (target.maxHp < target.currentHp) {
+    target.currentHp = target.maxHp
+  }
+
+  if (typeOfMagic) {
+    targeter.currentMp -= typeOfMagic.cost
+    characterMutations.updateStats(targeter)
+  }
+
+  characterMutations.updateStats(target)
+  return orderMutations.finishTurn()
+}
+
+function itemReviveTarget (target, item) {
+  target.currentHp += itemHpCalculation(target.maxHp, item.revive)
+  target.killed = false
+
+  const clonedItem = clone(item)
+  clonedItem.amount -= 1
+  itemMutations.updateItems(clonedItem)
+  characterMutations.updateStats(target)
+  return orderMutations.finishTurn()
+}
+
 export function completeAction (battleName, initiator, typeOfAction, typeOfMagic, item) {
   // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
@@ -138,6 +167,12 @@ export function completeAction (battleName, initiator, typeOfAction, typeOfMagic
         return itemHealTarget(target, item)
       }
       return healTarget(target, targeter, typeOfMagic)
+    }
+    case 'revive': {
+      if (item) {
+        return itemReviveTarget(target, item)
+      }
+      return reviveTarget(target, targeter, typeOfMagic)
     }
     default:
       return dealDamage(target, targeter)

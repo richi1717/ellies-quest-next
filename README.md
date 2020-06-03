@@ -83,7 +83,21 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 # Changelog
 
-## #0.1.3
+## #0.1.5
+
+- components/StatusWindow/BattleMenu/Items
+
+  - add revive logic
+  - remove console.log
+
+- components/StatusWindow/BattleMenu/Targets/herlpers.js
+
+  - add logic for revive item and magic
+
+- operations/queries/getCharacters.js
+  - add killed to heroes
+
+## #0.1.4
 
 - DELETE public/img/battle-sprites.png
 - DELETE public/img/mario.gif

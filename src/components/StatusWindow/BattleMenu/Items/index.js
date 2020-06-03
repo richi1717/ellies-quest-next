@@ -15,21 +15,18 @@ import Targets from '../Targets'
 const Items = ({ targeter }) => {
   const itemsQuery = useQuery(GET_ITEMS)
   const items = itemsQuery?.data?.items
-  console.log(items)
 
   const [selectedItem, setSelectedItem] = useState('')
   const [typeOfAction, setTypeOfAction] = useState(false)
 
   const handleClick = (item) => {
-    console.log(item)
     if (item.revive) {
-      console.log(item.revive)
+      setTypeOfAction('revive')
     }
     if (item.damage) {
       setTypeOfAction('itemDamage')
     }
     if (item.restore) {
-      console.log(item.restore)
       setTypeOfAction('heal')
     }
     setSelectedItem(item)
