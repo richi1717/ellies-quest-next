@@ -37,6 +37,7 @@ Location.propTypes = {
   battleScene: PropTypes.string.isRequired,
   enemies: PropTypes.arrayOf(PropTypes.object).isRequired,
   heroes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export async function getServerSideProps ({ params }) {

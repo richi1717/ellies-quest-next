@@ -144,7 +144,7 @@ const Hero = ({ hero, position }) => {
   return (
     <HeroStyled id={battleName} {...heroInfo}>
       {attacking && <TurnStyled />}
-      <DamageDisplay amount={200} isDamage={true} position={position} />
+      <DamageDisplay amount={hero.currentHp} isDamage={true} position={position} />
     </HeroStyled>
   )
 }

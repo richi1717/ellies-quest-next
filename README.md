@@ -83,6 +83,63 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 # Changelog
 
+## #0.1.6
+
+- next.config.js
+
+  - add debug default value of false
+
+- components/Enemies/Enemy
+
+  - add logic to attack heroes
+  - add logic to randomly select from living heroes
+  - add animations to display attacking heroes
+  - for debugging purposes add "turn icon" above enemy
+
+- components/Header
+
+  - make header absolute so it doesn't move the screen around
+
+- components/Heroes/Hero
+
+  - for debugging purposes change display numbers to show currentHp
+  - edit styles to show dead even if they were defending
+
+- MOVE components/StatusWindow/BattleMenu/Targets/helpers.js -> helpers/completeAction.js
+- MOVE components/StatusWindow/Timer -> components/StatusWindow/HeroStats/Timer
+
+- helpers/damageCalc
+
+  - add logic to default to currentHp max damage amount
+
+- hooks
+
+  - add useDelayedEffect
+  - remove useDelayedAction
+
+- operations/mutations/addEnemies.js
+
+  - add debug currentHp logic
+
+- operations/mutations/killCharacter.js
+
+  - add async/await to killCharacter so completeAction can wait until it's complete
+  - add logic to call enemyKilledFadeOut with element
+
+- operations/mutations/setWhoseTurn.js
+
+  - add reset to whoseTurnVar
+  - reorder calls
+  - add console.error to see if whoseTurn messes up
+
+- pages/battle/[battleScene].js
+
+  - add items
+
+- helpers/fadeOut.js
+
+  - add enemyKilledFadeOut
+
 ## #0.1.5
 
 - components/StatusWindow/BattleMenu/Items

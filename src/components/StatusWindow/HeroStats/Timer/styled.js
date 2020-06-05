@@ -4,7 +4,7 @@ import {
   lightBlueTransparent,
   redTransparent,
   yellowTransparent,
-} from '../../../constants/variables'
+} from '../../../../constants/variables'
 
 export const StatusBarContainer = styled.div`
   background-color: ${redTransparent};

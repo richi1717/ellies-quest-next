@@ -32,7 +32,8 @@ export const HeroStyled = styled.div`
   left: ${(props) => props.attacking && 0};
   background-position-x: ${(props) => props.attacking && multiplier(1)};
   background-position-x: ${(props) => props.killed && multiplier(6)};
-  background-position-x: ${(props) => props.defending && !props.attacking && multiplier(3)};
+  background-position-x: ${(props) =>
+    props.defending && !props.attacking && !props.killed && multiplier(3)};
 `
 const fade = keyframes`
   0% { opacity: 1; }

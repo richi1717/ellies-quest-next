@@ -4,6 +4,7 @@ export default function addEnemies (enemiesVar) {
       if (!enemy?.battleName) {
         enemy.battleName = `enemy${idx + 1}`
         enemy.position = idx + 1
+        if (process.env.debug) enemy.currentHp = 1
       }
     })
     enemiesVar(enemies)

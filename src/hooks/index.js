@@ -17,6 +17,7 @@ export const useTimer = (timer, character, format) => {
     window.addEventListener('load', timerDisplay)
 
     return () => {
+      timer.stop()
       window.removeEventListener('load', timerDisplay)
     }
   }, [])
@@ -33,6 +34,8 @@ const useRestartTimer = (battleName, timerDisplay) => {
   }, [whoShouldRestartTimer])
 }
 
-const useDelayedAction = (action) => {
-  setTimeout(action, 1000)
+export const useDelayedEffect = (action, time = 1000, args = []) => {
+  useEffect(() => {
+    setTimeout(action, time)
+  }, [...args])
 }

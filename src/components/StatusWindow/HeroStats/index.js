@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import StatusTimer from '../Timer'
+import Timer from './Timer'
 import {
   CurrentStatsContainer,
   StatusBar,
@@ -26,7 +26,7 @@ export default function HeroStats ({ stats }) {
         </StatusBarContainer>
       </CurrentStatsContainer>
       <CurrentStatsContainer>
-        <StatusTimer name={stats.battleName} character={stats} />
+        <Timer name={stats.battleName} character={stats} />
       </CurrentStatsContainer>
     </StatusContainer>
   )

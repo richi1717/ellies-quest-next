@@ -32,14 +32,17 @@ export function skipTurn (orderVar, whoseTurnVar) {
 export function finishTurn (orderVar, whoShouldRestartTimerVar, whoseTurnVar) {
   return () => {
     const endersTurn = whoseTurnVar()
+    whoseTurnVar({})
     const order = orderVar()
-    const whoseTurn = order.shift()
     const newOrder = [...order]
-
-    resetDefending(whoseTurn)
+    const whoseTurn = newOrder.shift()
+    if (!whoseTurn?.battleName) {
+      console.error(whoseTurn, newOrder, order, 'repeat'.repeat(20))
+    }
+    whoseTurn?.battleName.includes('hero') && resetDefending(whoseTurn)
 
     orderVar(newOrder)
-    whoseTurnVar(whoseTurn)
     whoShouldRestartTimerVar(endersTurn?.battleName)
+    whoseTurn && whoseTurnVar(whoseTurn)
   }
 }

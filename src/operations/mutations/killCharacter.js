@@ -1,11 +1,13 @@
+import { enemyKilledFadeOut } from '../../helpers/fadeOut'
+
 function removeCharacterFromOrder (orderVar, found) {
   const order = [...orderVar()]
   const newOrder = order.filter((character) => character?.battleName !== found?.battleName)
-  return orderVar(newOrder)
+  orderVar(newOrder)
 }
 
 export default function killCharacter (enemiesVar, heroesVar, orderVar) {
-  return (character) => {
+  return async (character) => {
     const enemies = enemiesVar()
     const heroes = heroesVar()
 
@@ -14,10 +16,13 @@ export default function killCharacter (enemiesVar, heroesVar, orderVar) {
     )
 
     if (foundEnemy >= 0) {
+      const enemyEl = document.getElementById(character?.battleName)
       const newEnemies = [...enemies.filter((_, idx) => idx !== foundEnemy)]
 
+      const done = await enemyKilledFadeOut(enemyEl)
       enemiesVar(newEnemies)
-      return removeCharacterFromOrder(orderVar, character)
+      removeCharacterFromOrder(orderVar, character)
+      return done
     }
 
     const foundHero = heroes.findIndex(

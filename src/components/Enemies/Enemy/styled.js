@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const enemySprite = {
   'enemy-green-eagle': '0 0',
@@ -63,7 +63,13 @@ const enemyPosition = {
   },
 }
 
-export const EnemyDisplay = styled.div`
+const attackingPosition = {
+  hero0: { top: '35%', left: '110%' },
+  hero1: { top: '75%', left: '110%' },
+  hero2: { top: '55%', left: '120%' },
+}
+
+export const EnemyDisplayStyled = styled.div`
   background-image: url('/img/monsters2.png');
   background-size: 2220px;
   position: absolute;
@@ -71,5 +77,26 @@ export const EnemyDisplay = styled.div`
   width: 90px;
   background-position: ${(props) => enemySprite[props.classes]};
   z-index: 2;
+  transition: top 1.5s ease, left 1.5s ease;
   ${(props) => enemyPosition[props.id]};
+  ${(props) => attackingPosition[props.target]};
+`
+
+const fade = keyframes`
+  0% { opacity: 1; }
+  25% { opacity: 0.5; }
+  50% { opacity: 0; }
+  75% { opacity: 0.5; }
+  100% { opacity: 1; }
+`
+
+export const TurnStyled = styled.div`
+  animation: ${fade} 2s linear infinite;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 30px solid rgba(255, 255, 0, 0.8);
+  height: 0;
+  margin-left: 40%;
+  margin-top: -30%;
+  width: 0;
 `

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
-import { completeAction } from './helpers'
+import completeAction from '../../../../helpers/completeAction'
 import { GET_CHARACTERS } from '../../../../operations/queries/getCharacters'
 import { NameStyled, TargetsContainerStyled } from './styled'
 
