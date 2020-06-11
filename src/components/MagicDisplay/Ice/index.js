@@ -20,7 +20,7 @@ const move = keyframes`
 
 const IceStyled = styled.div`
   animation-name: ${move};
-  animation-duration: 3s;
+  animation-duration: 2s;
   animation-timing-function: steps(1);
   animation-iteration-count: 1;
   background-image: url(/img/ice.png);

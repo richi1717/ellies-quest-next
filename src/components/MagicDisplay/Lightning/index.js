@@ -19,7 +19,7 @@ const fade = keyframes`
 `
 
 const LightningStyled = styled.div`
-  animation: ${move} 1.5s linear 2;
+  animation: ${move} 1s linear 2;
   background-image: url('/img/lightning.png');
   background-size: cover;
   height: 100px;
@@ -32,7 +32,7 @@ const LightningStyled = styled.div`
 `
 
 const CloudStyled = styled.div`
-  animation: ${fade} 1s linear 3;
+  animation: ${fade} 1s linear 2;
   background-image: url('/img/dark-cloud.png');
   background-size: cover;
   filter: brightness(0.3);

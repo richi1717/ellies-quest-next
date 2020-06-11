@@ -10,13 +10,13 @@ const move = keyframes`
 `
 
 const FireStyled = styled.div`
+  animation: ${move} 1s linear 2;
   background-image: url('/img/fire.png');
   background-size: cover;
-  opacity: 0;
   height: 100px;
-  width: 100px;
   margin-left: ${(props) => (props.move ? -10 : 20)}px;
-  animation: ${move} 1.5s linear 2;
+  opacity: 0;
+  width: 100px;
 `
 
 const Fire = () => <FireStyled />

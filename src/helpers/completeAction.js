@@ -8,6 +8,7 @@ import {
   magicHealCalculation,
 } from './damageCalc'
 import { getCharacterByBattleName } from '../operations/queries/getCharacters'
+import { magicDisplayVar } from '../cache'
 
 async function dealDamage (target, targeter) {
   const dmg = damageCalculation(targeter, target)
@@ -31,18 +32,22 @@ async function dealDamage (target, targeter) {
 
 // [TODO} adding typeOfMagic to args for later calculating element resistance and vulnerabilities
 async function dealMagicDamage (target, targeter, typeOfMagic) {
-  const dmg = magicDamageCalculation(targeter, target)
-  target.currentHp -= dmg
-  targeter.currentMp -= typeOfMagic.cost
+  magicDisplayVar({ target: target.battleName, type: typeOfMagic.type })
+  await setTimeout(async () => {
+    magicDisplayVar({})
+    const dmg = magicDamageCalculation(targeter, target)
+    target.currentHp -= dmg
+    targeter.currentMp -= typeOfMagic.cost
 
-  if (target.currentHp <= 0) {
-    await characterMutations.killCharacter(target)
-  } else {
-    characterMutations.updateStats(targeter)
-    characterMutations.updateStats(target)
-  }
+    if (target.currentHp <= 0) {
+      await characterMutations.killCharacter(target)
+    } else {
+      characterMutations.updateStats(targeter)
+      characterMutations.updateStats(target)
+    }
 
-  return orderMutations.finishTurn()
+    return orderMutations.finishTurn()
+  }, 2000)
 }
 
 function dealItemDamage (target, item) {
@@ -64,20 +69,25 @@ function dealItemDamage (target, item) {
 }
 
 function healTarget (target, targeter, typeOfMagic) {
-  const dmg = magicHealCalculation(targeter)
-  target.currentHp += dmg
+  magicDisplayVar({ target: target.battleName, type: typeOfMagic?.type })
 
-  if (target.maxHp < target.currentHp) {
-    target.currentHp = target.maxHp
-  }
+  setTimeout(() => {
+    magicDisplayVar({})
+    const dmg = magicHealCalculation(targeter)
+    target.currentHp += dmg
 
-  if (typeOfMagic) {
-    targeter.currentMp -= typeOfMagic.cost
-    characterMutations.updateStats(targeter)
-  }
+    if (target.maxHp < target.currentHp) {
+      target.currentHp = target.maxHp
+    }
 
-  characterMutations.updateStats(target)
-  return orderMutations.finishTurn()
+    if (typeOfMagic) {
+      targeter.currentMp -= typeOfMagic.cost
+      characterMutations.updateStats(targeter)
+    }
+
+    characterMutations.updateStats(target)
+    return orderMutations.finishTurn()
+  }, 2000)
 }
 
 function itemHealTarget (target, item) {

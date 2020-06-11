@@ -10,7 +10,7 @@ const move = keyframes`
 `
 
 const CureStyled = styled.div`
-  animation: ${move} 3s linear 1;
+  animation: ${move} 2s linear 1;
   background-image: url('/img/cure.png');
   background-size: 500px;
   opacity: 0;
@@ -27,7 +27,7 @@ const Cure = () => {
   useEffect(() => {
     setTimeout(() => {
       setSecondPosition(true)
-    }, 1500)
+    }, 1000)
   }, [])
 
   return <CureStyled secondPosition={secondPosition} />

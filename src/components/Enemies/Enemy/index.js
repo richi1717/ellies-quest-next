@@ -5,20 +5,23 @@ import PropTypes from 'prop-types'
 import { enemyAttackFX } from '../../../helpers/soundEffects'
 import { EnemyDisplayStyled, TurnStyled } from './styled'
 import { GET_HEROES } from '../../../operations/queries/getCharacters'
+import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
 import { orderMutations } from '../../../operations/mutations'
 import { useDelayedEffect, useTimer } from '../../../hooks'
 import completeAction from '../../../helpers/completeAction'
 import CountDownTimer from '../../../helpers/CountDownTimer'
-import MagicAttacks from '../../MagicAttacks'
+import MagicDisplay from '../../MagicDisplay'
 
 const Enemy = ({ enemy, position }) => {
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
+  const magicDisplayQuery = useQuery(GET_MAGIC_DISPLAY)
   const heroesQuery = useQuery(GET_HEROES)
   const [target, setTarget] = useState('')
   const battleName = `enemy${position}`
   const heroes = heroesQuery?.data?.heroes
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
+  const magicDisplay = magicDisplayQuery?.data?.magicDisplay
   const attacking = whoseTurn?.battleName === battleName
 
   const timer = new CountDownTimer(100, 50)
@@ -62,12 +65,6 @@ const Enemy = ({ enemy, position }) => {
     [target]
   )
 
-  // simulate magic selection, add magicAttack state change which includes type and target
-  const magicAttack = {
-    type: 'lightning',
-    target: 'enemy1',
-  }
-
   return (
     <div>
       <EnemyDisplayStyled
@@ -75,7 +72,7 @@ const Enemy = ({ enemy, position }) => {
         id={battleName}
         target={target?.battleName}
       >
-        {magicAttack?.target === battleName && <MagicAttacks magicAttack={magicAttack} />}
+        {magicDisplay?.target === battleName && <MagicDisplay type={magicDisplay?.type} />}
         {/* This is just to show that the damage update is working */}
         <div style={{ position: 'absolute', color: 'red' }}>{enemy.currentHp}</div>
         {attacking && <TurnStyled />}

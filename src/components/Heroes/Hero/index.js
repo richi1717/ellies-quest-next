@@ -2,11 +2,12 @@
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import React, { memo, useEffect, useState } from 'react'
+import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
 import { getCharacterByBattleName } from '../../../operations/queries/getCharacters'
 import { HeroStyled, TurnStyled } from './styled'
 import DamageDisplay from './DamageDisplay'
-import MagicAttacks from '../../MagicAttacks'
+import MagicDisplay from '../../MagicDisplay'
 
 // import Victory from './Victory';
 // import setTimeoutHelper from '../helpers/time-out';
@@ -16,6 +17,8 @@ const Hero = ({ hero, position }) => {
   // console.log({ hero })
   const { battleName, killed } = hero
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
+  const magicDisplayQuery = useQuery(GET_MAGIC_DISPLAY)
+  const magicDisplay = magicDisplayQuery?.data?.magicDisplay
 
   const { magicType } = 'attack' // ????
   const [pos2, setPos2] = useState(false)
@@ -138,16 +141,11 @@ const Hero = ({ hero, position }) => {
     name: hero.classes,
   }
 
-  const magicAttack = {
-    target: 'hero4',
-    type: 'cure',
-  }
-
   return (
     <HeroStyled id={battleName} {...heroInfo}>
       {attacking && <TurnStyled />}
       <DamageDisplay amount={hero.currentHp} isDamage={true} position={position} />
-      {magicAttack?.target === battleName && <MagicAttacks magicAttack={magicAttack} />}
+      {magicDisplay?.target === battleName && <MagicDisplay type={magicDisplay?.type} />}
     </HeroStyled>
   )
 }
