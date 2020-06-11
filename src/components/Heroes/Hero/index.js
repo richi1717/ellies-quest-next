@@ -1,17 +1,13 @@
-import React, { memo, useEffect, useState } from 'react'
+// import classnames from 'classnames'
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
-// import classnames from 'classnames'
+import React, { memo, useEffect, useState } from 'react'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
-import { HeroStyled, TurnStyled } from './styled'
-import {
-  cureMagicFX,
-  fireMagicFX,
-  heroAttackFX,
-  lightningMagicFX,
-} from '../../../helpers/soundEffects'
-import DamageDisplay from './DamageDisplay'
 import { getCharacterByBattleName } from '../../../operations/queries/getCharacters'
+import { HeroStyled, TurnStyled } from './styled'
+import DamageDisplay from './DamageDisplay'
+import MagicAttacks from '../../MagicAttacks'
+
 // import Victory from './Victory';
 // import setTimeoutHelper from '../helpers/time-out';
 // import { damageCalculation, getBaseDamage } from '../helpers/damage-calc';
@@ -141,10 +137,17 @@ const Hero = ({ hero, position }) => {
     attacking,
     name: hero.classes,
   }
+
+  const magicAttack = {
+    target: 'hero4',
+    type: 'cure',
+  }
+
   return (
     <HeroStyled id={battleName} {...heroInfo}>
       {attacking && <TurnStyled />}
       <DamageDisplay amount={hero.currentHp} isDamage={true} position={position} />
+      {magicAttack?.target === battleName && <MagicAttacks magicAttack={magicAttack} />}
     </HeroStyled>
   )
 }

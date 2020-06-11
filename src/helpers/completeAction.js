@@ -120,8 +120,8 @@ function reviveTarget (target, targeter, typeOfMagic) {
 }
 
 function itemReviveTarget (target, item) {
-  target.currentHp += itemHpCalculation(target.maxHp, item.revive)
   target.killed = false
+  target.currentHp += itemHpCalculation(target.maxHp, item.revive)
 
   const clonedItem = clone(item)
   clonedItem.amount -= 1

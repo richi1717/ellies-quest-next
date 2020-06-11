@@ -10,6 +10,7 @@ import { orderMutations } from '../../../operations/mutations'
 import { useDelayedEffect, useTimer } from '../../../hooks'
 import completeAction from '../../../helpers/completeAction'
 import CountDownTimer from '../../../helpers/CountDownTimer'
+import MagicAttacks from '../../MagicAttacks'
 
 const Enemy = ({ enemy, position }) => {
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
@@ -61,6 +62,12 @@ const Enemy = ({ enemy, position }) => {
     [target]
   )
 
+  // simulate magic selection, add magicAttack state change which includes type and target
+  const magicAttack = {
+    type: 'lightning',
+    target: 'enemy1',
+  }
+
   return (
     <div>
       <EnemyDisplayStyled
@@ -68,6 +75,7 @@ const Enemy = ({ enemy, position }) => {
         id={battleName}
         target={target?.battleName}
       >
+        {magicAttack?.target === battleName && <MagicAttacks magicAttack={magicAttack} />}
         {/* This is just to show that the damage update is working */}
         <div style={{ position: 'absolute', color: 'red' }}>{enemy.currentHp}</div>
         {attacking && <TurnStyled />}
