@@ -13,7 +13,7 @@ export default function HeroStats ({ stats }) {
 
   return (
     <StatusContainer>
-      <CurrentStatsContainer data-low={hpPercentage <= 95}>
+      <CurrentStatsContainer data-low={hpPercentage <= 25}>
         {stats.currentHp}/{stats.maxHp}
         <StatusBarContainer>
           <StatusBar type="hp" width={hpPercentage} />

@@ -22,6 +22,7 @@ export default function updateStats (enemiesVar, heroesVar) {
         heroesVar(newHeroes)
       }
     }
+    return new Promise((resolve) => resolve('done'))
   }
 }
 

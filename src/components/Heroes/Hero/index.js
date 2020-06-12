@@ -4,10 +4,13 @@ import PropTypes from 'prop-types'
 import React, { memo, useEffect, useState } from 'react'
 import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
+import { GET_WHO_IS_RECEIVING_ACTION } from '../../../operations/queries/getWhoIsReceivingAction'
 import { getCharacterByBattleName } from '../../../operations/queries/getCharacters'
 import { HeroStyled, TurnStyled } from './styled'
-import DamageDisplay from './DamageDisplay'
+import DamageDisplay from '../../DamageDisplay'
 import MagicDisplay from '../../MagicDisplay'
+import { useDelayedEffect } from '../../../hooks'
+import { whoIsReceivingActionVar } from '../../../cache'
 
 // import Victory from './Victory';
 // import setTimeoutHelper from '../helpers/time-out';
@@ -18,7 +21,19 @@ const Hero = ({ hero, position }) => {
   const { battleName, killed } = hero
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
   const magicDisplayQuery = useQuery(GET_MAGIC_DISPLAY)
+  const whoIsReceivingActionQuery = useQuery(GET_WHO_IS_RECEIVING_ACTION)
   const magicDisplay = magicDisplayQuery?.data?.magicDisplay
+  const whoIsReceivingAction = whoIsReceivingActionQuery?.data?.whoIsReceivingAction
+
+  useDelayedEffect(
+    () => {
+      if (whoIsReceivingAction?.target === battleName) {
+        whoIsReceivingActionVar({})
+      }
+    },
+    2000,
+    [whoIsReceivingAction?.target]
+  )
 
   const { magicType } = 'attack' // ????
   const [pos2, setPos2] = useState(false)
@@ -144,7 +159,13 @@ const Hero = ({ hero, position }) => {
   return (
     <HeroStyled id={battleName} {...heroInfo}>
       {attacking && <TurnStyled />}
-      <DamageDisplay amount={hero.currentHp} isDamage={true} position={position} />
+      {whoIsReceivingAction?.target === battleName && (
+        <DamageDisplay
+          amount={whoIsReceivingAction?.amount}
+          isDamage={whoIsReceivingAction?.type === 'damage'}
+          battleName={battleName}
+        />
+      )}
       {magicDisplay?.target === battleName && <MagicDisplay type={magicDisplay?.type} />}
     </HeroStyled>
   )

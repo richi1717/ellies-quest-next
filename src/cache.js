@@ -44,6 +44,11 @@ export const cache = new InMemoryCache({
             return magicDisplayVar()
           },
         },
+        whoIsReceivingAction: {
+          read () {
+            return whoIsReceivingActionVar()
+          },
+        },
       },
     },
   },
@@ -57,3 +62,4 @@ export const orderVar = cache.makeVar([])
 export const whoseTurnVar = cache.makeVar({})
 export const whoShouldRestartTimerVar = cache.makeVar('')
 export const magicDisplayVar = cache.makeVar({})
+export const whoIsReceivingActionVar = cache.makeVar({})

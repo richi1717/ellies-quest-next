@@ -6,22 +6,27 @@ import { enemyAttackFX } from '../../../helpers/soundEffects'
 import { EnemyDisplayStyled, TurnStyled } from './styled'
 import { GET_HEROES } from '../../../operations/queries/getCharacters'
 import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
+import { GET_WHO_IS_RECEIVING_ACTION } from '../../../operations/queries/getWhoIsReceivingAction'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
 import { orderMutations } from '../../../operations/mutations'
 import { useDelayedEffect, useTimer } from '../../../hooks'
+import { whoIsReceivingActionVar } from '../../../cache'
 import completeAction from '../../../helpers/completeAction'
 import CountDownTimer from '../../../helpers/CountDownTimer'
+import DamageDisplay from '../../DamageDisplay'
 import MagicDisplay from '../../MagicDisplay'
 
 const Enemy = ({ enemy, position }) => {
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
   const magicDisplayQuery = useQuery(GET_MAGIC_DISPLAY)
   const heroesQuery = useQuery(GET_HEROES)
+  const whoIsReceivingActionQuery = useQuery(GET_WHO_IS_RECEIVING_ACTION)
   const [target, setTarget] = useState('')
   const battleName = `enemy${position}`
   const heroes = heroesQuery?.data?.heroes
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
   const magicDisplay = magicDisplayQuery?.data?.magicDisplay
+  const whoIsReceivingAction = whoIsReceivingActionQuery?.data?.whoIsReceivingAction
   const attacking = whoseTurn?.battleName === battleName
 
   const timer = new CountDownTimer(100, 50)
@@ -37,6 +42,16 @@ const Enemy = ({ enemy, position }) => {
   }
 
   useTimer(timer, enemy, handleTick)
+
+  useDelayedEffect(
+    () => {
+      if (whoIsReceivingAction?.target === battleName) {
+        whoIsReceivingActionVar({})
+      }
+    },
+    2000,
+    [whoIsReceivingAction?.target]
+  )
 
   useDelayedEffect(
     () => {
@@ -58,7 +73,7 @@ const Enemy = ({ enemy, position }) => {
       if (target) {
         setTarget('')
         enemyAttackFX()
-        setTimeout(() => completeAction(target?.battleName, enemy, 'damage'), 1500)
+        completeAction(target?.battleName, enemy, 'damage', null, null, 1500)
       }
     },
     1500,
@@ -74,7 +89,13 @@ const Enemy = ({ enemy, position }) => {
       >
         {magicDisplay?.target === battleName && <MagicDisplay type={magicDisplay?.type} />}
         {/* This is just to show that the damage update is working */}
-        <div style={{ position: 'absolute', color: 'red' }}>{enemy.currentHp}</div>
+        {whoIsReceivingAction?.target === battleName && (
+          <DamageDisplay
+            amount={whoIsReceivingAction?.amount}
+            isDamage={whoIsReceivingAction?.type === 'damage'}
+            battleName={battleName}
+          />
+        )}
         {attacking && <TurnStyled />}
       </EnemyDisplayStyled>
       {/* {showDamageOverHead()} */}

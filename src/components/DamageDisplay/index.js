@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { Damage } from './styled'
 
-const DamageDisplay = ({ amount, isDamage, position }) => {
+const DamageDisplay = ({ amount, isDamage, battleName }) => {
   return (
-    <Damage id={`damageDisplayHero${position}`} isDamage={isDamage}>
+    <Damage id={`damageDisplay${battleName}`} isDamage={isDamage}>
       {amount}
     </Damage>
   )
@@ -12,7 +12,7 @@ const DamageDisplay = ({ amount, isDamage, position }) => {
 DamageDisplay.propTypes = {
   amount: PropTypes.number.isRequired,
   isDamage: PropTypes.bool,
-  position: PropTypes.number.isRequired,
+  battleName: PropTypes.string.isRequired,
 }
 
 DamageDisplay.defaultProps = {

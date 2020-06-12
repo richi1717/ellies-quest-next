@@ -8,19 +8,28 @@ import {
   magicHealCalculation,
 } from './damageCalc'
 import { getCharacterByBattleName } from '../operations/queries/getCharacters'
-import { magicDisplayVar } from '../cache'
+import { magicDisplayVar, whoIsReceivingActionVar } from '../cache'
 
-async function dealDamage (target, targeter) {
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time))
+}
+
+async function dealDamage (target, targeter, wait) {
   const dmg = damageCalculation(targeter, target)
   target.currentHp -= dmg
+  whoIsReceivingActionVar({ target: target?.battleName, amount: dmg, type: 'damage' })
 
   console.log('%cdamage: ' + dmg, 'color: orange', { target, targeter })
   console.log('%cEnemy Health: ' + target.currentHp, 'color: green')
 
+  if (wait) {
+    await sleep(wait)
+  }
+
   if (target.currentHp <= 0) {
     await characterMutations.killCharacter(target)
   } else {
-    characterMutations.updateStats(target)
+    await characterMutations.updateStats(target)
   }
   // [TODO] change .defending of hero to false
   // const targetEl = document.getElementById(target.battleName)
@@ -38,65 +47,70 @@ async function dealMagicDamage (target, targeter, typeOfMagic) {
     const dmg = magicDamageCalculation(targeter, target)
     target.currentHp -= dmg
     targeter.currentMp -= typeOfMagic.cost
+    whoIsReceivingActionVar({ target: target?.battleName, amount: dmg, type: 'damage' })
+    await characterMutations.updateStats(targeter)
 
     if (target.currentHp <= 0) {
       await characterMutations.killCharacter(target)
     } else {
-      characterMutations.updateStats(targeter)
-      characterMutations.updateStats(target)
+      await characterMutations.updateStats(target)
     }
 
     return orderMutations.finishTurn()
   }, 2000)
 }
 
-function dealItemDamage (target, item) {
+async function dealItemDamage (target, item) {
   target.currentHp -= item.damage
+  whoIsReceivingActionVar({
+    target: target?.battleName,
+    amount: item.damage,
+    type: 'damage',
+  })
 
   if (target.currentHp <= 0) {
     characterMutations.killCharacter(target)
   } else {
-    characterMutations.updateStats(target)
+    await characterMutations.updateStats(target)
   }
 
-  if (item) {
-    const clonedItem = clone(item)
-    clonedItem.amount -= 1
-    itemMutations.updateItems(clonedItem)
-  }
+  const clonedItem = clone(item)
+  clonedItem.amount -= 1
+  itemMutations.updateItems(clonedItem)
 
   return orderMutations.finishTurn()
 }
 
-function healTarget (target, targeter, typeOfMagic) {
+async function healTarget (target, targeter, typeOfMagic) {
   magicDisplayVar({ target: target.battleName, type: typeOfMagic?.type })
 
-  setTimeout(() => {
+  await setTimeout(async () => {
     magicDisplayVar({})
     const dmg = magicHealCalculation(targeter)
     target.currentHp += dmg
-
+    whoIsReceivingActionVar({ target: target?.battleName, amount: dmg, type: 'heal' })
     if (target.maxHp < target.currentHp) {
       target.currentHp = target.maxHp
     }
 
     if (typeOfMagic) {
       targeter.currentMp -= typeOfMagic.cost
-      characterMutations.updateStats(targeter)
+      await characterMutations.updateStats(targeter)
     }
 
-    characterMutations.updateStats(target)
+    await characterMutations.updateStats(target)
     return orderMutations.finishTurn()
   }, 2000)
 }
 
-function itemHealTarget (target, item) {
+async function itemHealTarget (target, item) {
   item.restore.map((statToRestore) => {
     if (statToRestore === 'HP') {
       let hp = item.str
       if (item.percentage) {
         hp = itemHpCalculation(target.maxHp, item.percentage)
       }
+      whoIsReceivingActionVar({ target: target?.battleName, amount: hp, type: 'heal' })
       target.currentHp += hp
       return target
     }
@@ -105,10 +119,12 @@ function itemHealTarget (target, item) {
       if (item.percentage) {
         mp = itemMpCalculation(target.maxHp, item.percentage)
       }
+      whoIsReceivingActionVar({ target: target?.battleName, amount: mp, type: 'heal' })
       target.currentMp += mp
       return target
     }
   })
+
   if (target.maxHp < target.currentHp) {
     target.currentHp = target.maxHp
   }
@@ -120,7 +136,7 @@ function itemHealTarget (target, item) {
   const clonedItem = clone(item)
   clonedItem.amount -= 1
   itemMutations.updateItems(clonedItem)
-  characterMutations.updateStats(target)
+  await characterMutations.updateStats(target)
   return orderMutations.finishTurn()
 }
 
@@ -129,18 +145,19 @@ function reviveTarget (target, targeter, typeOfMagic) {
   return healTarget(target, targeter, typeOfMagic)
 }
 
-function itemReviveTarget (target, item) {
+async function itemReviveTarget (target, item) {
   target.killed = false
-  target.currentHp += itemHpCalculation(target.maxHp, item.revive)
-
+  const hp = itemHpCalculation(target.maxHp, item.revive)
+  target.currentHp += hp
+  whoIsReceivingActionVar({ target: target?.battleName, amount: hp, type: 'heal' })
   const clonedItem = clone(item)
   clonedItem.amount -= 1
   itemMutations.updateItems(clonedItem)
-  characterMutations.updateStats(target)
+  await characterMutations.updateStats(target)
   return orderMutations.finishTurn()
 }
 
-export default function (battleName, initiator, typeOfAction, typeOfMagic, item) {
+export default function (battleName, initiator, typeOfAction, typeOfMagic, item, wait) {
   // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
   // take care of figuring out the type of "damage"
@@ -153,7 +170,7 @@ export default function (battleName, initiator, typeOfAction, typeOfMagic, item)
 
   switch (typeOfAction) {
     case 'damage':
-      return dealDamage(target, targeter)
+      return dealDamage(target, targeter, wait)
     case 'itemDamage':
       return dealItemDamage(target, item)
     case 'magicDamage':
