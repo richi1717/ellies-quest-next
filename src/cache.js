@@ -49,6 +49,11 @@ export const cache = new InMemoryCache({
             return whoIsReceivingActionVar()
           },
         },
+        expFromBattle: {
+          read () {
+            return expFromBattleVar()
+          },
+        },
       },
     },
   },
@@ -63,3 +68,4 @@ export const whoseTurnVar = cache.makeVar({})
 export const whoShouldRestartTimerVar = cache.makeVar('')
 export const magicDisplayVar = cache.makeVar({})
 export const whoIsReceivingActionVar = cache.makeVar({})
+export const expFromBattleVar = cache.makeVar(0)

@@ -4,6 +4,7 @@ import updateStats, { updateHeroStats } from './updateStats'
 import killCharacter from './killCharacter'
 import {
   enemiesVar,
+  expFromBattleVar,
   heroesVar,
   itemsVar,
   orderVar,
@@ -23,7 +24,7 @@ export const orderMutations = {
 export const characterMutations = {
   addEnemies: addEnemies(enemiesVar),
   addHeroes: addHeroes(heroesVar),
-  killCharacter: killCharacter(enemiesVar, heroesVar, orderVar),
+  killCharacter: killCharacter(enemiesVar, heroesVar, orderVar, expFromBattleVar),
   updateHeroStats: updateHeroStats(heroesVar),
   updateStats: updateStats(enemiesVar, heroesVar),
 }

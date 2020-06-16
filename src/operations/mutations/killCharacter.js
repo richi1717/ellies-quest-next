@@ -1,4 +1,5 @@
 import { enemyKilledFadeOut } from '../../helpers/fadeOut'
+import { addExp } from '../../helpers/addExp'
 
 function removeCharacterFromOrder (orderVar, found) {
   const order = [...orderVar()]
@@ -6,7 +7,7 @@ function removeCharacterFromOrder (orderVar, found) {
   orderVar(newOrder)
 }
 
-export default function killCharacter (enemiesVar, heroesVar, orderVar) {
+export default function killCharacter (enemiesVar, heroesVar, orderVar, expFromBattleVar) {
   return async (character) => {
     const enemies = enemiesVar()
     const heroes = heroesVar()
@@ -21,6 +22,7 @@ export default function killCharacter (enemiesVar, heroesVar, orderVar) {
 
       const done = await enemyKilledFadeOut(enemyEl)
       enemiesVar(newEnemies)
+      await addExp(character.expOnDefeat, expFromBattleVar)
       removeCharacterFromOrder(orderVar, character)
       return done
     }
