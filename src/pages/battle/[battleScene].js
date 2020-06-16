@@ -1,10 +1,8 @@
-// import useSWR from 'swr'
 import { random, sampleSize } from 'lodash'
 import fetch from 'node-fetch'
 import PropTypes from 'prop-types'
 import { BattleContainer, Container, GlobalStyle } from '../../pagesStyled'
 import { characterMutations, itemMutations } from '../../operations/mutations'
-import { normalBattleMusic } from '../../helpers/soundEffects'
 import Enemies from '../../components/Enemies'
 import Heroes from '../../components/Heroes'
 import StatusWindow from '../../components/StatusWindow'
@@ -16,7 +14,6 @@ export default function Location ({ battleScene, enemies, heroes, items }) {
   characterMutations.addEnemies(enemies)
   characterMutations.addHeroes(heroes)
   itemMutations.addItems(items)
-  // normalBattleMusic()
 
   return (
     <>

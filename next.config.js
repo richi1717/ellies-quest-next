@@ -4,5 +4,6 @@ module.exports = {
     dbEnemies: 'https://ellies-quest.firebaseio.com/monsters.json',
     dbItems: 'https://ellies-quest.firebaseio.com/items.json',
     debug: false,
+    playAudio: false,
   },
 }

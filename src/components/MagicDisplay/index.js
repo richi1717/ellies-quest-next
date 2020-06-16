@@ -3,23 +3,22 @@ import CureMagic from './Cure'
 import FireMagic from './Fire'
 import IceMagic from './Ice'
 import LightningMagic from './Lightning'
-import { cureMagicFX, fireMagicFX, lightningMagicFX } from '../../helpers/soundEffects'
+import { useSoundFX } from '../../hooks'
 
 const MagicDisplay = ({ type }) => {
+  const { audio } = useSoundFX(`${type}MagicFX`)
+  audio.play()
+
   if (type === 'cure') {
-    cureMagicFX()
     return <CureMagic />
   }
   if (type === 'fire') {
-    fireMagicFX()
     return <FireMagic />
   }
   if (type === 'ice') {
-    cureMagicFX()
     return <IceMagic />
   }
   if (type === 'lightning') {
-    lightningMagicFX()
     return <LightningMagic />
   }
 

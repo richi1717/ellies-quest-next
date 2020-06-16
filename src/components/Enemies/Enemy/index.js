@@ -2,14 +2,13 @@ import { random } from 'lodash'
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { enemyAttackFX } from '../../../helpers/soundEffects'
 import { EnemyDisplayStyled, TurnStyled } from './styled'
 import { GET_HEROES } from '../../../operations/queries/getCharacters'
 import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
 import { GET_WHO_IS_RECEIVING_ACTION } from '../../../operations/queries/getWhoIsReceivingAction'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
 import { orderMutations } from '../../../operations/mutations'
-import { useDelayedEffect, useTimer } from '../../../hooks'
+import { useDelayedEffect, useSoundFX, useTimer } from '../../../hooks'
 import { whoIsReceivingActionVar } from '../../../cache'
 import completeAction from '../../../helpers/completeAction'
 import CountDownTimer from '../../../helpers/CountDownTimer'
@@ -22,6 +21,7 @@ const Enemy = ({ enemy, position }) => {
   const heroesQuery = useQuery(GET_HEROES)
   const whoIsReceivingActionQuery = useQuery(GET_WHO_IS_RECEIVING_ACTION)
   const [target, setTarget] = useState('')
+  const { play } = useSoundFX('enemyAttackFX')
   const battleName = `enemy${position}`
   const heroes = heroesQuery?.data?.heroes
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
@@ -72,7 +72,7 @@ const Enemy = ({ enemy, position }) => {
     () => {
       if (target) {
         setTarget('')
-        enemyAttackFX()
+        play()
         completeAction(target?.battleName, enemy, 'damage', null, null, 1500)
       }
     },
