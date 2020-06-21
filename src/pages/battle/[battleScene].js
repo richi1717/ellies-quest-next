@@ -44,7 +44,7 @@ export async function getServerSideProps ({ params }) {
   const areaEnemies = monsters.filter((enemy) =>
     enemy.sections.includes(params.battleScene)
   )
-  const enemies = sampleSize(areaEnemies, random(1, 1))
+  const enemies = sampleSize(areaEnemies, random(1, 5))
 
   return {
     props: {
