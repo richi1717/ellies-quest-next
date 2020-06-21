@@ -1,3 +1,5 @@
+import usedItems from './usedItems'
+
 export function addItems (itemsVar) {
   return (items) => {
     itemsVar(items)
@@ -6,14 +8,13 @@ export function addItems (itemsVar) {
 
 export function updateItems (itemsVar) {
   return (item) => {
+    usedItems(item)
     const list = itemsVar()
-    const updated = list.reduce((acc, _item) => {
+    const updated = list.map((_item) => {
       if (_item.id === item.id) {
-        acc.push(item)
-      } else {
-        acc.push(_item)
+        return item
       }
-      return acc
+      return _item
     }, [])
     itemsVar(updated)
   }

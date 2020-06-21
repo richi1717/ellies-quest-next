@@ -12,6 +12,6 @@ export function calcLevel (exp) {
   return Math.floor(exp / Math.sqrt(exp * 250))
 }
 
-export function calcExpTNL (exp) {
+export function calcExpToNextLevel (exp) {
   return calcExp(calcLevel(exp) + 1) - exp
 }

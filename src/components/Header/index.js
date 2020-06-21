@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
-import { GET_ENEMIES } from '../../operations/queries/getCharacters'
+import { GET_VICTORY } from '../../operations/queries/getVictory'
 import { GET_WHOSE_TURN } from '../../operations/queries/getWhoseTurn'
 import { InfoBar } from './styled'
 import { useSoundFX } from '../../hooks'
@@ -8,22 +8,22 @@ import musicLocation from '../../constants/musicLocation'
 
 export default function Header () {
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
-  const enemiesQuery = useQuery(GET_ENEMIES)
+  const victoryQuery = useQuery(GET_VICTORY)
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn
-  const enemies = enemiesQuery?.data?.enemies
+  const victory = victoryQuery?.data?.victory
 
   const { play: victoryPlay } = useSoundFX('battleVictoryMusic')
 
   useEffect(() => {
     const bmAudio = document.getElementById('audioNormalBattleMusic')
-    if (enemies.length === 0) {
+    if (victory) {
       bmAudio.pause()
       victoryPlay()
     } else {
       process.env.playAudio && bmAudio.play()
       bmAudio.loop = true
     }
-  }, [enemies.length === 0])
+  }, [victory])
 
   return (
     <>
@@ -35,8 +35,8 @@ export default function Header () {
         Your browser does not support the
         <code>audio</code> element.
       </audio>
-      {whoseTurn?.name && enemies.length && <InfoBar>{whoseTurn?.name}'s turn</InfoBar>}
-      {!enemies.length && <InfoBar>You Win!</InfoBar>}
+      {whoseTurn?.name && !victory && <InfoBar>{whoseTurn?.name}'s turn</InfoBar>}
+      {victory && <InfoBar>You Win!</InfoBar>}
     </>
   )
 }
