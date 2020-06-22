@@ -16,8 +16,10 @@ function checkHeroForLevel (hero, exp) {
       agility: random(0, 2),
     }
 
+    const { defending, ...rest } = hero
+
     const updated = {
-      ...hero,
+      ...rest,
       str: hero.str + updatedStats.str,
       def: hero.def + updatedStats.def,
       maxMp: hero.maxMp + updatedStats.maxMp,
@@ -28,16 +30,17 @@ function checkHeroForLevel (hero, exp) {
       agility: hero.agility + updatedStats.agility,
     }
 
-    return updated
+    return Promise.resolve(updated)
   }
-  return hero
+  return Promise.resolve(hero)
 }
 
 function updateCharacters (heroes) {
   const exp = expFromBattleVar()
   heroes.map(async (hero) => {
     if (hero.inPlay) {
-      const updatedHero = { ...checkHeroForLevel(hero, exp) }
+      const updatedHero = { ...(await checkHeroForLevel(hero, exp)) }
+
       if (!hero.killed) {
         updatedHero.exp += exp
       }

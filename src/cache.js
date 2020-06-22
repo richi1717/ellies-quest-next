@@ -64,12 +64,18 @@ export const cache = new InMemoryCache({
             return usedItemsVar()
           },
         },
+        combatDetails: {
+          read () {
+            return combatDetailsVar()
+          },
+        },
       },
     },
   },
 })
 
 export const charactersVar = cache.makeVar([])
+export const combatDetailsVar = cache.makeVar({})
 export const enemiesVar = cache.makeVar([])
 export const expFromBattleVar = cache.makeVar(0)
 export const heroesVar = cache.makeVar([])

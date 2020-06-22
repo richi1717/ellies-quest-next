@@ -35,7 +35,8 @@ const Items = ({ targeter }) => {
   const ItemsDisplay = () =>
     items.map(
       (item) =>
-        item.amount > 0 && (
+        item.amount > 0 &&
+        item.battle && (
           <ActionStyled
             onClick={() => handleClick(item)}
             key={item.id}

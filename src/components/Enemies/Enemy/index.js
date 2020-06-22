@@ -73,7 +73,7 @@ const Enemy = ({ enemy, position }) => {
       if (target) {
         setTarget('')
         play()
-        completeAction(target?.battleName, enemy, 'damage', null, null, 1500)
+        completeAction(target?.battleName, enemy, 'damage')
       }
     },
     1500,

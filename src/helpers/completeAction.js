@@ -8,23 +8,28 @@ import {
   magicHealCalculation,
 } from './damageCalc'
 import { getCharacterByBattleName } from '../operations/queries/getCharacters'
-import { magicDisplayVar, whoIsReceivingActionVar } from '../cache'
+import { combatDetailsVar, magicDisplayVar, whoIsReceivingActionVar } from '../cache'
 
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
 
-async function dealDamage (target, targeter, wait) {
+async function dealDamage (target, targeter) {
   const dmg = damageCalculation(targeter, target)
   target.currentHp -= dmg
+
+  if (targeter.battleName.includes('hero')) {
+    await sleep(1500)
+  }
+
   whoIsReceivingActionVar({ target: target?.battleName, amount: dmg, type: 'damage' })
+
+  if (targeter.battleName.includes('enemy')) {
+    await sleep(1500)
+  }
 
   console.log('%cdamage: ' + dmg, 'color: orange', { target, targeter })
   console.log('%cEnemy Health: ' + target.currentHp, 'color: green')
-
-  if (wait) {
-    await sleep(wait)
-  }
 
   if (target.currentHp <= 0) {
     await characterMutations.killCharacter(target)
@@ -77,6 +82,8 @@ async function dealItemDamage (target, item) {
   const clonedItem = clone(item)
   clonedItem.amount -= 1
   itemMutations.updateItems(clonedItem)
+
+  await sleep(1500)
 
   return orderMutations.finishTurn()
 }
@@ -137,6 +144,9 @@ async function itemHealTarget (target, item) {
   clonedItem.amount -= 1
   itemMutations.updateItems(clonedItem)
   await characterMutations.updateStats(target)
+
+  await sleep(1500)
+
   return orderMutations.finishTurn()
 }
 
@@ -154,10 +164,13 @@ async function itemReviveTarget (target, item) {
   clonedItem.amount -= 1
   itemMutations.updateItems(clonedItem)
   await characterMutations.updateStats(target)
+
+  await sleep(1500)
+
   return orderMutations.finishTurn()
 }
 
-export default function (battleName, initiator, typeOfAction, typeOfMagic, item, wait) {
+export default function (battleName, initiator, typeOfAction, typeOfMagic, item) {
   // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
   // take care of figuring out the type of "damage"
@@ -165,12 +178,28 @@ export default function (battleName, initiator, typeOfAction, typeOfMagic, item,
   // if it's damage then subtract,
   // if it's revive then see if dead or undead,
   // if it's damage or heal but dead
-  const target = clone(getCharacterByBattleName(battleName))
-  const targeter = clone(initiator)
+  const _target = clone(getCharacterByBattleName(battleName))
+  const _targeter = clone(initiator)
+
+  const text = () => {
+    if (typeOfAction === 'damage') return _targeter.attack || 'Attacks'
+    if (item) return `Uses ${item.name}`
+    if (typeOfMagic) return `Casts ${typeOfMagic.name}`
+  }
+
+  combatDetailsVar({
+    target: _target,
+    targeter: _targeter,
+    text: text(),
+    type: typeOfAction,
+  })
+
+  const target = { ..._target }
+  const targeter = { ..._targeter }
 
   switch (typeOfAction) {
     case 'damage':
-      return dealDamage(target, targeter, wait)
+      return dealDamage(target, targeter)
     case 'itemDamage':
       return dealItemDamage(target, item)
     case 'magicDamage':

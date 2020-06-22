@@ -1,6 +1,8 @@
 import { addExp } from '../../helpers/addExp'
 import { enemyKilledFadeOut } from '../../helpers/fadeOut'
 import { handleVictory } from '../../helpers/handleVictory'
+import { combatDetailsVar, itemsVar } from '../../cache'
+import { updateItems } from './items'
 
 function removeCharacterFromOrder (orderVar, found) {
   const order = [...orderVar()]
@@ -8,8 +10,25 @@ function removeCharacterFromOrder (orderVar, found) {
   orderVar(newOrder)
 }
 
+function checkIfItemDrop (character) {
+  if (character?.itemsHeld?.length > 0) {
+    const items = itemsVar()
+    character.itemsHeld.map((itemHeld) => {
+      if (Math.random() < itemHeld.rate * 0.01) {
+        const found = items.find((item) => item.name === itemHeld.name)
+
+        if (found) {
+          found.amount += 1
+          updateItems(itemsVar)(found)
+        }
+      }
+    })
+  }
+}
+
 export default function killCharacter (enemiesVar, heroesVar, orderVar) {
   return async (character) => {
+    combatDetailsVar({})
     const enemies = enemiesVar()
     const heroes = heroesVar()
 
@@ -18,6 +37,7 @@ export default function killCharacter (enemiesVar, heroesVar, orderVar) {
     )
 
     if (foundEnemy >= 0) {
+      checkIfItemDrop(character)
       const enemyEl = document.getElementById(character?.battleName)
       const newEnemies = [...enemies.filter((_, idx) => idx !== foundEnemy)]
 

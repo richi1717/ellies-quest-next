@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
 import updateStats from './updateStats'
 import { getCharacterByBattleName } from '../queries/getCharacters'
-import { enemiesVar, heroesVar } from '../../cache'
+import { combatDetailsVar, enemiesVar, heroesVar } from '../../cache'
 
 function resetDefending (character) {
   if (character?.battleName.includes('hero')) {
@@ -33,6 +33,7 @@ export function finishTurn (orderVar, whoShouldRestartTimerVar, whoseTurnVar) {
   return () => {
     const endersTurn = whoseTurnVar()
     whoseTurnVar({})
+    combatDetailsVar({})
     const order = orderVar()
     const newOrder = [...order]
     const whoseTurn = newOrder.shift()
