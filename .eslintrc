@@ -4,8 +4,7 @@
   "extends": [
     "plugin:react/recommended",
     "standardize",
-    "plugin:prettierx/standardize-bundle",
-    "plugin:prettierx/react",
+    "plugin:prettierx/standardize",
     "plugin:jsx-a11y/recommended"
   ],
   "rules": {

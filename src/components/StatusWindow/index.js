@@ -6,7 +6,7 @@ import BattleMenu from './BattleMenu'
 import {
   MenuContainer,
   MenuMainContainer,
-  MenuStats,
+  // MenuStats,
   MenuStatsContainer,
   MenuStatsHeader,
   MenuStatsHeaderContainer,

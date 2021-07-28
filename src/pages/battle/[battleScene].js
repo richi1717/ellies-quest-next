@@ -8,7 +8,7 @@ import Heroes from '../../components/Heroes'
 import StatusWindow from '../../components/StatusWindow'
 import Header from '../../components/Header'
 
-const battleScenes = ['boss', 'beach', 'desert', 'forest', 'grass'] // use to redirect to different tests
+// const battleScenes = ['boss', 'beach', 'desert', 'forest', 'grass'] // use to redirect to different tests
 
 export default function Location ({ battleScene, enemies, heroes, items }) {
   characterMutations.addEnemies(enemies)

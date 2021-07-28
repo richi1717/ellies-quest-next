@@ -20,8 +20,8 @@
 ```javascript
 $ git clone git@github.com:richi1717/ellies-quest-next.git
 $ cd ellies-quest-next
-$ yarn
-$ yarn dev
+$ npm i
+$ npm run dev
 ```
 
 Then go to [http://localhost:3000/battle/forest](http:/localhost:3000/battle/forest) in chrome (because honestly that's the only one I've tested in right now) and enjoy.
@@ -55,6 +55,13 @@ If you want to be a part of this in any way, feel free to email me at richi1717@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
 
 # Changelog
+
+## #0.2.0
+
+- Updated packages
+- swapped to npm
+- fix eslint issues
+- updated next, react, react-dom
 
 ## #0.1.7
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_RESTARTING_NAME } from '../operations/queries/getRestartingName'
-import { GET_ENEMIES } from '../operations/queries/getCharacters'
+// import { GET_ENEMIES } from '../operations/queries/getCharacters'
 import musicLocation from '../constants/musicLocation'
 
 export const useTimer = (timer, character, format) => {
