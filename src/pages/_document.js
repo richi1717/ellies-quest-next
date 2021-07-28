@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from 'next/document'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -14,13 +14,13 @@ export default class MyDocument extends Document {
 
   render () {
     return (
-      <html lang="en">
+      <Html lang="en">
         <Head>{this.props.styleTags}</Head>
         <body style={{ display: 'flex', justifyContent: 'center' }}>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }

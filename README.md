@@ -63,6 +63,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - fix eslint issues
 - updated next, react, react-dom
 
+- herlpers/completeAction.js
+
+  - add name to export default
+
+- pages/\_document.js
+
+  - add Html from next instead of html
+
 ## #0.1.7
 
 - components/Enemies/Enemy

@@ -170,7 +170,13 @@ async function itemReviveTarget (target, item) {
   return orderMutations.finishTurn()
 }
 
-export default function (battleName, initiator, typeOfAction, typeOfMagic, item) {
+export default function completeAction (
+  battleName,
+  initiator,
+  typeOfAction,
+  typeOfMagic,
+  item
+) {
   // console.log(typeOfMagic, typeOfAction)
   // take care of calculating damage here
   // take care of figuring out the type of "damage"
