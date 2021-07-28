@@ -1,4 +1,4 @@
-import { random } from 'lodash'
+import { isEmpty, random } from 'lodash'
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import PropTypes from 'prop-types'
@@ -42,6 +42,17 @@ const Enemy = ({ enemy, position }) => {
   }
 
   useTimer(timer, enemy, handleTick)
+
+  // simulate loading into the queue
+  useDelayedEffect(
+    () => {
+      if (isEmpty(whoseTurn)) {
+        orderMutations.append(enemy)
+      }
+    },
+    100 - enemy?.agility,
+    []
+  )
 
   useDelayedEffect(
     () => {

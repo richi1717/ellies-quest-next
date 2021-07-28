@@ -1,14 +1,17 @@
 import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 import { GET_COMBAT_DETAILS } from '../../../operations/queries/getCombatDetails'
 import { GET_MAGIC_DISPLAY } from '../../../operations/queries/getMagicDisplay'
 import { GET_WHO_IS_RECEIVING_ACTION } from '../../../operations/queries/getWhoIsReceivingAction'
 import { GET_WHOSE_TURN } from '../../../operations/queries/getWhoseTurn'
 import { HeroStyled, TurnStyled } from './styled'
-import { useDelayedEffect, useSoundFX } from '../../../hooks'
+import { useDelayedEffect, useSoundFX, useTimer } from '../../../hooks'
 import { whoIsReceivingActionVar } from '../../../cache'
 import DamageDisplay from '../../DamageDisplay'
 import MagicDisplay from '../../MagicDisplay'
+import { characterMutations, orderMutations } from '../../../operations/mutations'
+import CountDownTimer from '../../../helpers/CountDownTimer'
 
 const Hero = ({ hero, position }) => {
   const { battleName, classes, defending, killed } = hero
@@ -22,6 +25,20 @@ const Hero = ({ hero, position }) => {
   const isAttacking =
     combatDetails?.type === 'damage' && combatDetails?.targeter?.battleName === battleName
   const { play } = useSoundFX('heroAttackFX')
+
+  const timer = new CountDownTimer(100, 50)
+
+  function handleTick () {
+    return function (seconds) {
+      const percentage = 100 - seconds
+
+      if (percentage === 100) {
+        orderMutations.append(hero)
+      }
+    }
+  }
+
+  useTimer(timer, hero, handleTick)
 
   useDelayedEffect(
     () => {
@@ -41,6 +58,16 @@ const Hero = ({ hero, position }) => {
     },
     2000,
     [whoIsReceivingAction?.target]
+  )
+  // simulate loading into the queue
+  useDelayedEffect(
+    () => {
+      if (isEmpty(whoseTurn)) {
+        orderMutations.append(hero)
+      }
+    },
+    100 - hero?.agility,
+    []
   )
 
   const whoseTurn = whoseTurnQuery?.data?.whoseTurn

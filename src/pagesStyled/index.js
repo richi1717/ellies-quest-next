@@ -17,7 +17,7 @@ export const Container = styled.div`
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    margin: 0;
+    background-color: #212527;
   }
   html {
     font-family: 'Orbitron', sans-serif;
@@ -28,11 +28,10 @@ export const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: inherit;
     color: inherit;
-    }
+  }
 
-  body {
+  html, body {
     margin: 0;
-    background-color: #212527;
   }
 `
 

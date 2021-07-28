@@ -2,7 +2,7 @@ import { addExp } from '../../helpers/addExp'
 import { enemyKilledFadeOut } from '../../helpers/fadeOut'
 import { handleVictory } from '../../helpers/handleVictory'
 import { combatDetailsVar, itemsVar } from '../../cache'
-import { updateItems } from './items'
+import usedItems from './usedItems'
 
 function removeCharacterFromOrder (orderVar, found) {
   const order = [...orderVar()]
@@ -18,8 +18,9 @@ function checkIfItemDrop (character) {
         const found = items.find((item) => item.name === itemHeld.name)
 
         if (found) {
-          found.amount += 1
-          updateItems(itemsVar)(found)
+          const dupe = { ...found, dropFromBattle: true }
+          dupe.amount += 1
+          usedItems(dupe)
         }
       }
     })

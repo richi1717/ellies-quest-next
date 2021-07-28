@@ -16,8 +16,7 @@ export const ActionStyled = styled.button`
   margin-bottom: -5px;
   margin-bottom: 4px;
   margin-top: 0px;
-  padding: 0 0;
-  text-indent: 10px;
+  padding: 0;
   text-shadow: 2px 1px #8a8a7b;
   outline: 0;
   &:hover {
@@ -46,6 +45,7 @@ export const BattleMenuStyled = styled.div`
   height: 200px;
   left: 150px;
   min-width: 300px;
+  padding: 12px;
   position: absolute;
   text-shadow: 2px 1px #8a8a7b;
   z-index: 1;

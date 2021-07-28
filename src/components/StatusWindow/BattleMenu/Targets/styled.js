@@ -17,8 +17,7 @@ export const NameStyled = styled.button`
   margin-bottom: 4px;
   margin-top: 0px;
   outline: 0;
-  padding: 0 0;
-  text-indent: 10px;
+  padding: 0;
   text-shadow: 2px 1px ${(props) => (props.warn ? black : '#8a8a7b')};
   &:hover {
     cursor: pointer;
@@ -40,6 +39,7 @@ export const TargetsContainerStyled = styled.div`
   justify-content: flex-start;
   left: ${(props) => (props.sub ? 80 : 40)}px;
   min-width: ${(props) => (props.moreThanFive ? 600 : 300)}px;
+  padding: 12px;
   position: absolute;
   text-shadow: 2px 1px #8a8a7b;
   z-index: 1;

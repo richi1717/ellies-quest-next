@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { isEmpty } from 'lodash'
 import { GET_VICTORY } from '../../operations/queries/getVictory'
 import { GET_WHOSE_TURN } from '../../operations/queries/getWhoseTurn'
 import { GET_COMBAT_DETAILS } from '../../operations/queries/getCombatDetails'
 import { InfoBar } from './styled'
-import { useSoundFX } from '../../hooks'
 import musicLocation from '../../constants/musicLocation'
 
 export default function Header () {
+  const router = useRouter()
   const whoseTurnQuery = useQuery(GET_WHOSE_TURN)
   const victoryQuery = useQuery(GET_VICTORY)
   const combatDetailsQuery = useQuery(GET_COMBAT_DETAILS)
@@ -16,13 +17,11 @@ export default function Header () {
   const victory = victoryQuery?.data?.victory
   const combatDetails = combatDetailsQuery?.data?.combatDetails
 
-  const { play: victoryPlay } = useSoundFX('battleVictoryMusic')
-
   useEffect(() => {
     const bmAudio = document.getElementById('audioNormalBattleMusic')
     if (victory) {
       bmAudio.pause()
-      victoryPlay()
+      router.push('/battle/victory')
     } else {
       process.env.playAudio && bmAudio.play()
       bmAudio.loop = true
@@ -38,7 +37,6 @@ export default function Header () {
         </InfoBar>
       )
     }
-    if (victory) return <InfoBar>You Win!</InfoBar>
     if (whoseTurn?.name) return <InfoBar>{whoseTurn?.name}'s turn</InfoBar>
     return null
   }

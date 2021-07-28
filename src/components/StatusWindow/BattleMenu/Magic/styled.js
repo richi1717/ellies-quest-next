@@ -22,6 +22,7 @@ export const MagicContainerStyled = styled.div`
   justify-content: flex-start;
   left: 40px;
   min-width: 300px;
+  padding: 12px;
   position: absolute;
   overflow: auto;
   text-shadow: 2px 1px #8a8a7b;
@@ -43,7 +44,6 @@ export const MagicNameStyled = styled.button`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 10px;
   width: 100%;
   &:hover {
     cursor: pointer;

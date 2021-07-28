@@ -16,7 +16,7 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>{this.props.styleTags}</Head>
-        <body>
+        <body style={{ display: 'flex', justifyContent: 'center' }}>
           <Main />
           <NextScript />
         </body>

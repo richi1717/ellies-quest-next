@@ -5,3 +5,13 @@ export const GET_ITEMS = gql`
     items @client
   }
 `
+
+export const GET_DROPPED_ITEMS = gql`
+  query GetDroppedItems {
+    usedItems @client {
+      name
+      dropFromBattle
+      drops
+    }
+  }
+`

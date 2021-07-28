@@ -56,6 +56,67 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 # Changelog
 
+## #0.1.7
+
+- components/Enemies/Enemy
+
+  - add isEmpty
+  - add logic to push enemy to the end of the queue with a delay of 100 - their agility
+
+- components/Header
+
+  - add useRouter
+  - remove useSoundFX
+  - add router.push('/battle/victory') instead of triggering the victory music
+  - remove InfoBar message
+
+- components/Heroes/Hero
+
+  - add isEmpty, useTimer, characterMutations, orderMutations, and CountDownTimer
+  - add logic to push heroes to the end of the queue with a delay of 100 - their agility
+  - add timer logic to update the timer bar in the status window
+
+- components/StatusWindow/BattleMenu/Magic/styled.js
+
+  - update padding
+
+- components/StatusWindow/BattleMenu/Targets/styled.js
+
+  - update padding and text-indent
+
+- components/StatusWindow/BattleMenu/styled.js
+
+  - update padding and text-indent
+
+- CREATE components/Victory
+- CREATE pages/battle/victory.js
+
+- operations/mutations/appendToOrder.js
+
+  - add logic to ensure characters aren't being entered into the queue multiple times
+
+- operations/mutations/killCharacter.js
+
+  - add usedItems
+  - cleanup logic to update used and gained items
+
+- operations/mutations/usedItems.js
+
+  - add logic to add items dropped from battle
+
+- operations/queries/getItems.js
+
+  - add get dropped items query
+
+- pages/\_document.js
+
+  - add style to body to center playable field
+
+- pagesStyled
+
+  - remove margin and add background-color to body
+  - remove background-color from `html, body`
+
 ## #0.1.6
 
 - next.config.js
