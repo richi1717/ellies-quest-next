@@ -12,7 +12,7 @@ if (!firebase.apps.length) {
 }
 const database = firebase.app().database()
 
-export default (req, res) => {
+const updateItems = (req, res) => {
   const body = JSON.parse(req.body)
   database.ref('items/' + body.id).update({
     ...body.item,
@@ -20,3 +20,5 @@ export default (req, res) => {
   res.statusCode = 200
   res.json({ message: 'Update complete' })
 }
+
+export default updateItems

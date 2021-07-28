@@ -12,7 +12,7 @@ if (!firebase.apps.length) {
 }
 const database = firebase.app().database()
 
-export default (req, res) => {
+const updateCharacters = (req, res) => {
   const body = JSON.parse(req.body)
   database.ref('characters/' + body.id).update({
     ...body.characterData,
@@ -20,3 +20,5 @@ export default (req, res) => {
   res.statusCode = 200
   res.json({ message: 'Update complete' })
 }
+
+export default updateCharacters
