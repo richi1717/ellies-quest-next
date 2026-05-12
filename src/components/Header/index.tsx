@@ -11,7 +11,11 @@ const InfoBar = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: white;
   display: flex;
   flex-direction: column;
@@ -31,16 +35,23 @@ export default function Header() {
   const whoseTurn = useBattleStore((store) => store.whoseTurn)
   const combatDetails = useBattleStore((store) => store.combatDetails)
 
+  // Start music on first user gesture — browsers block autoplay until interaction
+  useEffect(() => {
+    const audio = document.getElementById('audioNormalBattleMusic') as HTMLAudioElement | null
+    const startMusic = () => audio?.play().catch(() => {})
+    document.addEventListener('click', startMusic, { once: true })
+    document.addEventListener('keydown', startMusic, { once: true })
+    return () => {
+      document.removeEventListener('click', startMusic)
+      document.removeEventListener('keydown', startMusic)
+    }
+  }, [])
+
   useEffect(() => {
     const audio = document.getElementById('audioNormalBattleMusic') as HTMLAudioElement | null
     if (victory) {
       audio?.pause()
       navigate('/battle/victory')
-    } else {
-      if (audio) {
-        audio.loop = true
-        audio.play().catch(() => {})
-      }
     }
   }, [victory, navigate])
 
@@ -58,11 +69,7 @@ export default function Header() {
 
   return (
     <>
-      <audio
-        src={`/music/${musicLocation.normalBattleMusic}`}
-        id="audioNormalBattleMusic"
-        loop
-      />
+      <audio src={`/music/${musicLocation.normalBattleMusic}`} id="audioNormalBattleMusic" loop />
       {renderText()}
     </>
   )

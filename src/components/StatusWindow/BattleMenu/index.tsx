@@ -2,13 +2,7 @@ import { clone } from 'lodash'
 import { useState } from 'react'
 import styled from '@emotion/styled'
 import { useBattleStore } from '../../../store/battleStore'
-import {
-  black,
-  blackTransparent2,
-  fontFamily,
-  gray,
-  white,
-} from '../../../constants/variables'
+import { black, blackTransparent2, fontFamily, gray, white } from '../../../constants/variables'
 import BattleMenuItems from './Items'
 import BattleMenuMagic from './Magic'
 import Targets from './Targets'
@@ -27,12 +21,17 @@ const ActionStyled = styled('button', {
   outline: 0;
   padding: 0;
   text-shadow: 2px 1px #8a8a7b;
-  &:hover { cursor: pointer; color: blue; }
+  &:hover {
+    cursor: pointer;
+    color: blue;
+  }
   &:disabled {
     cursor: default;
     color: ${gray};
     text-shadow: 2px 1px ${black};
-    &:hover { cursor: default; }
+    &:hover {
+      cursor: default;
+    }
   }
 `
 
@@ -42,7 +41,11 @@ const BattleMenuStyled = styled.div`
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   bottom: 0;
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;
@@ -75,7 +78,9 @@ export default function BattleMenu({ stats }: Props) {
 
   return (
     <BattleMenuStyled>
-      <ActionStyled type="button" onClick={() => setTypeOfAction('damage')}>Attack</ActionStyled>
+      <ActionStyled type="button" onClick={() => setTypeOfAction('damage')}>
+        Attack
+      </ActionStyled>
       <ActionStyled
         type="button"
         onClick={() => setTypeOfAction('magic')}
@@ -83,9 +88,15 @@ export default function BattleMenu({ stats }: Props) {
       >
         Magic
       </ActionStyled>
-      <ActionStyled type="button" onClick={handleDefend}>Defend</ActionStyled>
-      <ActionStyled type="button" onClick={() => setTypeOfAction('items')}>Items</ActionStyled>
-      <ActionStyled type="button" onClick={() => setTypeOfAction('run')}>RUN!</ActionStyled>
+      <ActionStyled type="button" onClick={handleDefend}>
+        Defend
+      </ActionStyled>
+      <ActionStyled type="button" onClick={() => setTypeOfAction('items')}>
+        Items
+      </ActionStyled>
+      <ActionStyled type="button" onClick={() => setTypeOfAction('run')}>
+        RUN!
+      </ActionStyled>
 
       {typeOfAction === 'damage' && <Targets typeOfAction={typeOfAction} targeter={stats} />}
       {typeOfAction === 'magic' && <BattleMenuMagic targeter={stats} />}

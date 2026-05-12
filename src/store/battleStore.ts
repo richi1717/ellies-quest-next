@@ -11,13 +11,16 @@ import type {
 } from '@/types'
 import { enemyKilledFadeOut } from '../helpers/fadeOut'
 
+// Module-level loop ID — kept outside store to avoid per-frame re-renders
+let loopId: number | null = null
+
 interface BattleStore {
   heroes: Hero[]
   enemies: Enemy[]
   items: Item[]
   order: Character[]
   whoseTurn: Character | null
-  whoShouldRestartTimer: string
+  atbFills: Record<string, number>
   magicDisplay: MagicDisplay | null
   whoIsReceivingAction: ActionReceiver | null
   expFromBattle: number
@@ -33,6 +36,8 @@ interface BattleStore {
   appendToOrder: (character: Character) => void
   finishTurn: () => void
   skipTurn: () => void
+  startATBLoop: () => void
+  stopATBLoop: () => void
   setMagicDisplay: (display: MagicDisplay | null) => void
   setWhoIsReceivingAction: (action: ActionReceiver | null) => void
   setCombatDetails: (details: CombatDetails | null) => void
@@ -71,7 +76,7 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
   items: [],
   order: [],
   whoseTurn: null,
-  whoShouldRestartTimer: '',
+  atbFills: {},
   magicDisplay: null,
   whoIsReceivingAction: null,
   expFromBattle: 0,
@@ -84,10 +89,23 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
       ...e,
       battleName: e.battleName ?? `enemy${idx + 1}`,
     }))
-    set({ enemies: tagged })
+    set((state) => ({
+      enemies: tagged,
+      atbFills: {
+        ...state.atbFills,
+        ...Object.fromEntries(tagged.map((e) => [e.battleName, 0])),
+      },
+    }))
   },
 
-  addHeroes: (heroes) => set({ heroes }),
+  addHeroes: (heroes) =>
+    set((state) => ({
+      heroes,
+      atbFills: {
+        ...state.atbFills,
+        ...Object.fromEntries(heroes.map((h) => [h.battleName, 0])),
+      },
+    })),
 
   addItems: (items) => set({ items }),
 
@@ -98,13 +116,13 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
     if (isEnemy) {
       set({
         enemies: enemies.map((e) =>
-          e.battleName === character.battleName ? (character as Enemy) : e
+          e.battleName === character.battleName ? (character as Enemy) : e,
         ),
       })
     } else {
       set({
         heroes: heroes.map((h) =>
-          h.battleName === character.battleName ? (character as Hero) : h
+          h.battleName === character.battleName ? (character as Hero) : h,
         ),
       })
     }
@@ -112,8 +130,11 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
   },
 
   killCharacter: async (character) => {
-    const { enemies, heroes, order, expFromBattle } = get()
+    const { enemies, heroes, order, expFromBattle, atbFills } = get()
     set({ combatDetails: null })
+
+    const newAtbFills = { ...atbFills }
+    delete newAtbFills[character.battleName]
 
     const enemyIdx = enemies.findIndex((e) => e.battleName === character.battleName)
 
@@ -129,10 +150,10 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
         enemies: newEnemies,
         expFromBattle: newExpTotal,
         order: removeFromOrder(order, character.battleName),
+        atbFills: newAtbFills,
       })
 
       if (newEnemies.length === 0) {
-        // import dynamically to avoid circular deps
         const { handleVictory } = await import('../helpers/handleVictory')
         await handleVictory(heroes)
       }
@@ -146,6 +167,7 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
       set({
         heroes: updated,
         order: removeFromOrder(order, character.battleName),
+        atbFills: newAtbFills,
       })
     }
   },
@@ -160,15 +182,19 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
   },
 
   finishTurn: () => {
-    const { order, whoseTurn } = get()
+    const { order, whoseTurn, atbFills } = get()
     const newOrder = [...order]
     const next = newOrder.shift()
-    resetDefending(next ?? null, get)
+    resetDefending(whoseTurn, get)
+
+    const newAtbFills = { ...atbFills }
+    if (whoseTurn) newAtbFills[whoseTurn.battleName] = 0
+
     set({
       whoseTurn: next ?? null,
       order: newOrder,
-      whoShouldRestartTimer: whoseTurn?.battleName ?? '',
       combatDetails: null,
+      atbFills: newAtbFills,
     })
   },
 
@@ -177,8 +203,82 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
     const newOrder = [...order]
     const next = newOrder.shift()
     if (whoseTurn) newOrder.push(whoseTurn)
-    resetDefending(next ?? null, get)
+    resetDefending(whoseTurn, get)
     set({ whoseTurn: next ?? null, order: newOrder })
+  },
+
+  startATBLoop: () => {
+    if (loopId !== null) return
+    let last = performance.now()
+
+    const tick = (now: number) => {
+      const delta = now - last
+      last = now
+      const state = get()
+
+      const inQueue = new Set<string>(
+        [state.whoseTurn?.battleName, ...state.order.map((c) => c.battleName)].filter(
+          (n): n is string => Boolean(n),
+        ),
+      )
+
+      const newFills: Record<string, number> = { ...state.atbFills }
+      const newlyReady: Character[] = []
+
+      for (const hero of state.heroes) {
+        if (hero.killed || inQueue.has(hero.battleName)) continue
+        const current = state.atbFills[hero.battleName] ?? 0
+        if (current >= 100) {
+          newlyReady.push(hero)
+          continue
+        }
+        const fill = Math.min(100, current + ((100 + hero.agility) / 5000) * delta)
+        newFills[hero.battleName] = fill
+        if (fill >= 100) newlyReady.push(hero)
+      }
+
+      for (const enemy of state.enemies) {
+        if (enemy.killed || inQueue.has(enemy.battleName)) continue
+        const current = state.atbFills[enemy.battleName] ?? 0
+        if (current >= 100) {
+          newlyReady.push(enemy)
+          continue
+        }
+        const fill = Math.min(100, current + ((100 + enemy.agility) / 5000) * delta)
+        newFills[enemy.battleName] = fill
+        if (fill >= 100) newlyReady.push(enemy)
+      }
+
+      let newWhoseTurn = state.whoseTurn
+      const newOrder = [...state.order]
+
+      for (const char of newlyReady) {
+        if (inQueue.has(char.battleName)) continue
+        inQueue.add(char.battleName)
+        if (!newWhoseTurn && newOrder.length === 0) {
+          newWhoseTurn = char
+        } else if (!newOrder.some((c) => c.battleName === char.battleName)) {
+          newOrder.push(char)
+        }
+      }
+
+      set({
+        atbFills: newFills,
+        whoseTurn: newWhoseTurn,
+        order: newOrder,
+      })
+
+      loopId = requestAnimationFrame(tick)
+    }
+
+    loopId = requestAnimationFrame(tick)
+  },
+
+  stopATBLoop: () => {
+    if (loopId !== null) {
+      cancelAnimationFrame(loopId)
+      loopId = null
+    }
   },
 
   setMagicDisplay: (display) => set({ magicDisplay: display }),
@@ -195,7 +295,7 @@ export const useBattleStore = create<BattleStore>((set, get) => ({
     })
   },
 
-  addExp: (expGain) => set((s) => ({ expFromBattle: s.expFromBattle + expGain })),
+  addExp: (expGain) => set((store) => ({ expFromBattle: store.expFromBattle + expGain })),
 
   setVictory: (victory) => set({ victory }),
 

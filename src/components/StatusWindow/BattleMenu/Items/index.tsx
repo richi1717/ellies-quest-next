@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import styled from '@emotion/styled'
 import { useBattleStore } from '../../../../store/battleStore'
-import {
-  black,
-  blackTransparent2,
-  fontFamily,
-  gray,
-  white,
-} from '../../../../constants/variables'
+import { black, blackTransparent2, fontFamily, gray, white } from '../../../../constants/variables'
 import Targets from '../Targets'
 import type { Character, Item } from '@/types'
 
@@ -29,11 +23,16 @@ const ActionStyled = styled('button', {
   padding: 0 10px;
   text-shadow: 2px 1px #8a8a7b;
   width: 100%;
-  &:hover { cursor: pointer; color: blue; }
+  &:hover {
+    cursor: pointer;
+    color: blue;
+  }
   &:disabled {
     color: ${gray};
     text-shadow: 2px 1px ${black};
-    &:hover { cursor: default; }
+    &:hover {
+      cursor: default;
+    }
   }
 `
 
@@ -43,7 +42,11 @@ const ItemsContainerStyled = styled.div`
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   bottom: 40px;
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;

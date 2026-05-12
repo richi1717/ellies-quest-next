@@ -44,7 +44,7 @@ export async function handleVictory(heroes: Hero[]): Promise<void> {
         const updated = applyLevelUp(hero, expFromBattle)
         const withExp = hero.killed ? updated : { ...updated, exp: updated.exp + expFromBattle }
         return saveHero(withExp)
-      })
+      }),
   )
 
   await Promise.all(usedItems.map((item) => saveItem(item)))

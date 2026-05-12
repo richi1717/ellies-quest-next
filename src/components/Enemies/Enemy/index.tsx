@@ -1,11 +1,10 @@
-import { isEmpty, random } from 'lodash'
+import { random } from 'lodash'
 import { useState } from 'react'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { useBattleStore } from '../../../store/battleStore'
-import { useDelayedEffect, useSoundFX, useTimer } from '../../../hooks'
+import { useDelayedEffect, useSoundFX } from '../../../hooks'
 import completeAction from '../../../helpers/completeAction'
-import CountDownTimer from '../../../helpers/CountDownTimer'
 import DamageDisplay from '../../DamageDisplay'
 import MagicDisplay from '../../MagicDisplay'
 import type { Enemy } from '@/types'
@@ -67,7 +66,9 @@ const EnemyDisplayStyled = styled('div', {
   width: 90px;
   background-position: ${({ classes }) => enemySprite[classes] ?? '0 0'};
   z-index: 2;
-  transition: top 1.5s ease, left 1.5s ease;
+  transition:
+    top 1.5s ease,
+    left 1.5s ease;
   ${({ enemyId }) => enemyPosition[enemyId] ?? {}};
   ${({ attackTarget }) => attackingPosition[attackTarget] ?? {}};
 `
@@ -95,30 +96,10 @@ export default function EnemyComponent({ enemy, position }: Props) {
   const magicDisplay = useBattleStore((store) => store.magicDisplay)
   const whoIsReceivingAction = useBattleStore((store) => store.whoIsReceivingAction)
   const setWhoIsReceivingAction = useBattleStore((store) => store.setWhoIsReceivingAction)
-  const appendToOrder = useBattleStore((store) => store.appendToOrder)
 
   const [target, setTarget] = useState<(typeof heroes)[0] | null>(null)
   const { play } = useSoundFX('enemyAttackFX')
   const attacking = whoseTurn?.battleName === battleName
-
-  const timer = new CountDownTimer(100, 50)
-
-  function handleTick() {
-    return function (seconds: number) {
-      const percentage = 100 - seconds
-      if (percentage === 100) appendToOrder(enemy)
-    }
-  }
-
-  useTimer(timer, enemy, handleTick)
-
-  useDelayedEffect(
-    () => {
-      if (isEmpty(whoseTurn)) appendToOrder(enemy)
-    },
-    100 - enemy.agility,
-    []
-  )
 
   useDelayedEffect(
     () => {
@@ -127,7 +108,7 @@ export default function EnemyComponent({ enemy, position }: Props) {
       }
     },
     2000,
-    [whoIsReceivingAction?.target]
+    [whoIsReceivingAction?.target],
   )
 
   useDelayedEffect(
@@ -139,7 +120,7 @@ export default function EnemyComponent({ enemy, position }: Props) {
       }
     },
     1000,
-    [attacking]
+    [attacking],
   )
 
   useDelayedEffect(
@@ -151,7 +132,7 @@ export default function EnemyComponent({ enemy, position }: Props) {
       }
     },
     1500,
-    [target]
+    [target],
   )
 
   return (

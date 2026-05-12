@@ -23,7 +23,10 @@ const NameStyled = styled('button', {
   outline: 0;
   padding: 0;
   text-shadow: 2px 1px ${({ $warn }) => ($warn ? black : '#8a8a7b')};
-  &:hover { cursor: pointer; color: blue; }
+  &:hover {
+    cursor: pointer;
+    color: blue;
+  }
 `
 
 const TargetsContainerStyled = styled('div', {
@@ -34,7 +37,11 @@ const TargetsContainerStyled = styled('div', {
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   bottom: ${({ $sub }) => ($sub ? 80 : 40)}px;
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;
@@ -77,7 +84,9 @@ export default function Targets({ item, sub = false, targeter, typeOfAction, typ
           key={enemy.battleName}
           type="button"
           $warn={['heal', 'revive'].includes(typeOfAction)}
-          onClick={() => completeAction(enemy.battleName, targeter, typeOfAction, typeOfMagic, item)}
+          onClick={() =>
+            completeAction(enemy.battleName, targeter, typeOfAction, typeOfMagic, item)
+          }
         >
           {enemy.name}
         </NameStyled>

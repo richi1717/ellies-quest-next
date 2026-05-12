@@ -1,11 +1,9 @@
-import { isEmpty } from 'lodash'
 import styled from '@emotion/styled'
 import { keyframes, css } from '@emotion/react'
 import { useBattleStore } from '../../../store/battleStore'
-import { useDelayedEffect, useSoundFX, useTimer } from '../../../hooks'
+import { useDelayedEffect, useSoundFX } from '../../../hooks'
 import DamageDisplay from '../../DamageDisplay'
 import MagicDisplay from '../../MagicDisplay'
-import CountDownTimer from '../../../helpers/CountDownTimer'
 import type { Hero } from '@/types'
 
 const multiplier = (amount: number) => `-${amount * 115}px`
@@ -38,7 +36,7 @@ const swing = keyframes`
 const HeroStyled = styled('div', {
   shouldForwardProp: (prop) =>
     !['attacking', 'attackPosition', 'defending', 'killed', 'heroPosition', 'spriteName'].includes(
-      prop as string
+      prop as string,
     ),
 })<{
   heroPosition: number
@@ -50,14 +48,16 @@ const HeroStyled = styled('div', {
 }>`
   flex: 0.5;
   z-index: 1;
-  transition: top 1s ease, left 1s ease;
+  transition:
+    top 1s ease,
+    left 1s ease;
   position: absolute;
   background-image: url('/img/battle-sprites2.png');
   background-size: 820px;
   height: 120px;
   width: 120px;
   top: ${({ heroPosition: p }) => heroPosition[p]?.top ?? '50%'};
-  left: ${({ heroPosition: p, attacking }) => (attacking ? '0' : heroPosition[p]?.left ?? '25%')};
+  left: ${({ heroPosition: p, attacking }) => (attacking ? '0' : (heroPosition[p]?.left ?? '25%'))};
   background-position: ${({ spriteName }) => spritePosition[spriteName] ?? setBackgroundPos(0, 0)};
   background-position-x: ${({ attacking }) => attacking && multiplier(1)};
   background-position-x: ${({ killed }) => killed && multiplier(6)};
@@ -102,28 +102,20 @@ export default function HeroComponent({ hero, position }: Props) {
   const whoIsReceivingAction = useBattleStore((store) => store.whoIsReceivingAction)
   const combatDetails = useBattleStore((store) => store.combatDetails)
   const setWhoIsReceivingAction = useBattleStore((store) => store.setWhoIsReceivingAction)
-  const appendToOrder = useBattleStore((store) => store.appendToOrder)
 
   const isAttacking =
     combatDetails?.type === 'damage' && combatDetails.targeter?.battleName === battleName
   const attacking = whoseTurn?.battleName === battleName
-  const attackPosition = isAttacking ? combatDetails?.target?.battleName ?? '' : ''
+  const attackPosition = isAttacking ? (combatDetails?.target?.battleName ?? '') : ''
 
   const { play } = useSoundFX('heroAttackFX')
-  const timer = new CountDownTimer(100, 50)
-
-  function handleTick() {
-    return function (seconds: number) {
-      if (100 - seconds === 100) appendToOrder(hero)
-    }
-  }
-
-  useTimer(timer, hero, handleTick)
 
   useDelayedEffect(
-    () => { if (isAttacking) play() },
+    () => {
+      if (isAttacking) play()
+    },
     1000,
-    [isAttacking]
+    [isAttacking],
   )
 
   useDelayedEffect(
@@ -131,15 +123,7 @@ export default function HeroComponent({ hero, position }: Props) {
       if (whoIsReceivingAction?.target === battleName) setWhoIsReceivingAction(null)
     },
     2000,
-    [whoIsReceivingAction?.target]
-  )
-
-  useDelayedEffect(
-    () => {
-      if (isEmpty(whoseTurn)) appendToOrder(hero)
-    },
-    100 - hero.agility,
-    []
+    [whoIsReceivingAction?.target],
   )
 
   return (

@@ -32,5 +32,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

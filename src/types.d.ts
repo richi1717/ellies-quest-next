@@ -19,7 +19,6 @@ export interface Hero {
   defending?: boolean
   killed: boolean
   inPlay: boolean
-  atbFill: number
 }
 
 export interface Enemy {
@@ -40,7 +39,6 @@ export interface Enemy {
   attack: string
   killed: boolean
   sections: string[]
-  atbFill: number
 }
 
 export type Character = Hero | Enemy

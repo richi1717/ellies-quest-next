@@ -9,7 +9,11 @@ const ContainerStyled = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;
@@ -24,7 +28,11 @@ const CardStyled = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;

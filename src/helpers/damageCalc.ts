@@ -4,18 +4,12 @@ import { calcLevel } from './levelCalc'
 
 export function getBaseDamage(targeter: Character): number {
   const lvl = calcLevel(targeter.exp) || 1
-  return (
-    targeter.str +
-    ((targeter.str + lvl) / 3.2) * ((targeter.str * lvl) / 3.2)
-  )
+  return targeter.str + ((targeter.str + lvl) / 3.2) * ((targeter.str * lvl) / 3.2)
 }
 
 export function getBaseMagicDamage(targeter: Character): number {
   const lvl = calcLevel(targeter.exp)
-  return (
-    targeter.magic +
-    ((targeter.magic + lvl) / 2.8) * ((targeter.magic * lvl) / 2.8)
-  )
+  return targeter.magic + ((targeter.magic + lvl) / 2.8) * ((targeter.magic * lvl) / 2.8)
 }
 
 export function damageCalculation(targeter: Character, target: Character): number {

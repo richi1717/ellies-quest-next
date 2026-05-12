@@ -17,7 +17,7 @@ function actionText(
   typeOfAction: string,
   targeter: Character,
   item?: Item,
-  spell?: MagicSpell
+  spell?: MagicSpell,
 ): string {
   if (typeOfAction === 'damage') return targeter.attack || 'Attacks'
   if (item) return `Uses ${item.name}`
@@ -162,7 +162,7 @@ export default async function completeAction(
   initiator: Character,
   typeOfAction: string,
   spell?: MagicSpell,
-  item?: Item
+  item?: Item,
 ) {
   const { getCharacterByBattleName, setCombatDetails } = useBattleStore.getState()
 

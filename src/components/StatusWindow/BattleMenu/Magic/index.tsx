@@ -17,7 +17,11 @@ const MagicContainerStyled = styled.div`
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   bottom: 40px;
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex-direction: column;
@@ -49,11 +53,16 @@ const MagicNameStyled = styled('button', {
   padding: 0;
   text-shadow: 2px 1px ${({ $warn }) => ($warn ? black : '#8a8a7b')};
   width: 100%;
-  &:hover { cursor: pointer; color: blue; }
+  &:hover {
+    cursor: pointer;
+    color: blue;
+  }
   &:disabled {
     color: ${gray};
     text-shadow: 2px 1px ${black};
-    &:hover { cursor: default; }
+    &:hover {
+      cursor: default;
+    }
   }
 `
 

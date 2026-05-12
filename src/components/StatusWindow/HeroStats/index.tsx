@@ -18,7 +18,9 @@ const CurrentStatsContainer = styled('div', {
   flex: 2;
   align-self: flex-end;
   color: ${({ $low }) => ($low ? redTransparent : 'inherit')};
-  &:not(:last-child) { padding: 0 70px 0 0; }
+  &:not(:last-child) {
+    padding: 0 70px 0 0;
+  }
 `
 
 const StatusBarContainer = styled.div`
@@ -30,8 +32,7 @@ const StatusBarContainer = styled.div`
 const StatusBar = styled('div', {
   shouldForwardProp: (prop) => !['$type', '$width'].includes(prop as string),
 })<{ $type: 'hp' | 'mp'; $width: number }>`
-  background-color: ${({ $type }) =>
-    $type === 'hp' ? greenTransparent : lightBlueTransparent};
+  background-color: ${({ $type }) => ($type === 'hp' ? greenTransparent : lightBlueTransparent)};
   border-radius: 10px;
   height: 5px;
   width: ${({ $width }) => $width}%;

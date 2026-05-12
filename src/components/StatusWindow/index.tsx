@@ -17,7 +17,11 @@ const MenuMainContainer = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex: 1;
@@ -34,7 +38,11 @@ const MenuStatsContainer = styled.div`
   background-color: ${blackTransparent};
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 3px 3px ${black}, -3px -3px ${black}, -3px 3px ${black}, 3px -3px ${black};
+  box-shadow:
+    3px 3px ${black},
+    -3px -3px ${black},
+    -3px 3px ${black},
+    3px -3px ${black};
   color: ${white};
   display: flex;
   flex: 1;
@@ -52,7 +60,9 @@ const MenuStatsHeaderContainer = styled.div`
 
 const MenuStatsHeader = styled.div`
   flex: 2;
-  &:not(:last-child) { padding: 0 70px 0 0; }
+  &:not(:last-child) {
+    padding: 0 70px 0 0;
+  }
 `
 
 export default function StatusWindow() {
@@ -87,7 +97,7 @@ export default function StatusWindow() {
         (hero) =>
           hero.battleName === whoseTurn?.battleName && (
             <BattleMenu key={hero.battleName} stats={hero} />
-          )
+          ),
       )}
     </MenuContainer>
   )
